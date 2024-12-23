@@ -9,11 +9,14 @@
     </title>
 </head>
 <body>
+
+
     <header>
         {% block header %}
             Base header
         {% endblock %}
     </header>
+
 
     <main>
         {% block main %}
@@ -21,24 +24,25 @@
         {% endblock %}
     </main>
 
-    <h4>Current date and time from base template </h4>
-    <div>
-        Now: {% now "d/m/Y" %}
-    </div>
-
-    <div>
-        {% now "l" as current_weekday %}
-        Today is {{ current_weekday|lower }}
-    </div>
-
-    <div>
-        It is - {% now "H:i" %}
-    </div>
 
     <footer>
         {% block footer %}
-            Base footer
+            <div>Base footer </div>
+            <div>
+                Now: {% now "d/m/Y" %}
+            </div>
+
+            <div>
+                {% now "l" as current_weekday %}
+                Today is {{ current_weekday|lower }}
+            </div>
+
+            <div>
+                It is - {% now "H:i" %}
+            </div>
         {% endblock %}
     </footer>
+
+
 </body>
 </html>
