@@ -1,0 +1,73 @@
+{% extends "requestdataapp/base.html" %}
+
+
+{% block title %}
+    User bio
+{% endblock %}
+
+
+{% block body %}
+    <style>
+        .bio-block {
+            display: inline-block;
+            padding: 5px;
+            background: #b4ffc5;
+            border: 2px solid black;
+            border-radius: 10px;
+        }
+        .data-block {
+            display: inline-block;
+            padding: 5px;
+            background: #b4f8ff;
+            border: 2px solid black;
+            border-radius: 10px;
+        }
+    </style>
+
+    <h1>User form</h1>
+    <div class="bio-block">
+        <form method="post">
+            {% csrf_token %}
+            <p>
+                <label for="name-id">Fullname</label>
+                <input type="text" name="name" id="name-id" maxlength="100">
+            </p>
+            <p>
+                <label for="age">Age</label>
+                <input type="number" name="age" id="age" min="1" max="99">
+            </p>
+            <p>
+                <label for="bio">Bio</label>
+                <textarea name="bio" id="bio" cols="42" rows="5"></textarea>
+            </p>
+
+            <button type="submit">
+                Submit
+            </button>
+        </form>
+    </div>
+    <br>
+    <br>
+
+    {% if request.POST  %}
+    <div class="data-block">
+        <h2>Previous form data:</h2>
+        <table>
+            <tr>
+                <td>Fullname:</td>
+                <td>{{ request.POST.name }}</td>
+            </tr>
+            <tr>
+                <td>Age:</td>
+                <td>{{ request.POST.age }}</td>
+            </tr>
+            <tr>
+                <td>Bio:</td>
+                <td>
+                    <p>{{ request.POST.bio|linebreaks }}</p>
+                </td>
+            </tr>
+        </table>
+    </div>
+    {% endif %}
+{% endblock %}
