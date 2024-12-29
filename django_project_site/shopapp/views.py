@@ -4,6 +4,7 @@ from django.contrib.auth.models import Group
 from timeit import default_timer
 from datetime import datetime
 
+from shopapp.forms import ProductForm
 from shopapp.models import Product, Order
 
 
@@ -50,6 +51,18 @@ def products_list(request: HttpRequest):
     return render(
         request,
         "shopapp/products-list.html",
+        context,
+    )
+
+
+def create_product(request: HttpRequest) -> HttpResponse:
+    """Create a new product."""
+
+    form = ProductForm()
+    context = {"form": form}
+    return render(
+        request,
+        "shopapp/create-product.html",
         context,
     )
 
