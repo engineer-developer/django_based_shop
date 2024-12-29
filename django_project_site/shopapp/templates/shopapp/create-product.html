@@ -1,0 +1,24 @@
+{% extends 'shopapp/base.html' %}
+
+
+{% block title %}
+	Create product
+{% endblock %}
+
+{% block main %}
+	<h1>
+        Create a new product
+    </h1>
+    <div>
+        <form method="post">
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <button type="submit">
+                Create
+            </button>
+
+        </form>
+    </div>
+{% endblock %}
