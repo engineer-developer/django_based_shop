@@ -8,7 +8,9 @@ from shopapp.forms import ProductForm
 from shopapp.models import Product, Order
 
 
-def show_greetings(request: HttpRequest):
+def show_greetings(request: HttpRequest) -> HttpResponse:
+    """Show greetings for a user."""
+
     print("INFO:", request.path)
     print("INFO:", request.method)
     print("INFO:", request.headers)
@@ -16,7 +18,9 @@ def show_greetings(request: HttpRequest):
     return HttpResponse(content="<h1>Have a nice day!</h1>")
 
 
-def show_index(request: HttpRequest):
+def show_index(request: HttpRequest) -> HttpResponse:
+    """Get index page."""
+
     products = [
         ("laptop", 1999),
         ("desctop", 2999),
@@ -35,7 +39,9 @@ def show_index(request: HttpRequest):
     )
 
 
-def groups_list(request: HttpRequest):
+def groups_list(request: HttpRequest) -> HttpResponse:
+    """Get groups list."""
+
     context = {"groups": Group.objects.prefetch_related("permissions").all()}
     return render(
         request,
@@ -44,7 +50,9 @@ def groups_list(request: HttpRequest):
     )
 
 
-def products_list(request: HttpRequest):
+def products_list(request: HttpRequest) -> HttpResponse:
+    """Get products list."""
+
     context = {
         "products": Product.objects.all(),
     }
@@ -82,7 +90,9 @@ def create_product(request: HttpRequest) -> HttpResponse:
     )
 
 
-def orders_list(request: HttpRequest):
+def orders_list(request: HttpRequest) -> HttpResponse:
+    """Get orders list."""
+
     context = {
         "orders": Order.objects.select_related("user")
         .prefetch_related("products")
