@@ -2,6 +2,8 @@ from django.core.files.storage import FileSystemStorage
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render
 
+from requestdataapp.forms import UserBioForm
+
 
 def process_get_view(request: HttpRequest) -> HttpResponse:
     a = request.GET.get("a", "")
@@ -20,9 +22,11 @@ def process_get_view(request: HttpRequest) -> HttpResponse:
 
 
 def user_form(request: HttpRequest) -> HttpResponse:
+    context = {"form": UserBioForm()}
     return render(
         request,
         "requestdataapp/user-bio-form.html",
+        context=context,
     )
 
 
