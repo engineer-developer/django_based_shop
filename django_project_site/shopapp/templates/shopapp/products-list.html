@@ -7,12 +7,23 @@
 
 
 {% block main %}
+    <style>
+        .product-block {
+            border: 2px black solid;
+            border-radius: 5px;
+            background: #63dced;
+            margin: 2px;
+            padding: 2px;
+            display: inline-table;
+        }
+    </style>
+
     <h1>Products:</h1>
 
     {% if products %}
         <div>
             {% for product in products %}
-            <div style="border: 2px black solid; margin: 2px; padding: 2px; display: inline-table">
+            <div class="product-block">
                 <p>Name: {{ product.name }}</p>
                 <p>Price: {{ product.price }}</p>
                 <p>Discount: {% firstof product.discount "no discount" %} </p>
