@@ -1,6 +1,6 @@
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, reverse, redirect
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, User
 from timeit import default_timer
 from datetime import datetime
 
@@ -39,13 +39,12 @@ def show_index(request: HttpRequest) -> HttpResponse:
     )
 
 
-def groups_list(request: HttpRequest) -> HttpResponse:
-    """Get groups list."""
-
-    context = {"groups": Group.objects.prefetch_related("permissions").all()}
+def users_list(request: HttpRequest) -> HttpResponse:
+    """Get users list."""
+    context = {"users": User.objects.all()}
     return render(
         request,
-        "shopapp/groups-list.html",
+        "shopapp/users-list.html",
         context=context,
     )
 
