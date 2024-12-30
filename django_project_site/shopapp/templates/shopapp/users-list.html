@@ -1,0 +1,38 @@
+{% extends 'shopapp/base.html' %}
+
+
+{% block title %}
+	Users list
+{% endblock %}
+
+
+{% block main %}
+    <style>
+        .user-block {
+            background: #fff5cf;
+            display: inline-flex;
+        }
+    </style>
+
+	<h1>
+        Users:
+    </h1>
+    <div>
+            {% for user in users %}
+                <div class="user-block">
+                    <h4>id: {{ user.id }} </h4>
+                    <pre>
+                        username: {% firstof user.username "None" %}
+                        first_name: {% firstof user.first_name "None" %}
+                        last_name: {% firstof user.last_name "None" %}
+                        email: {% firstof user.email "None" %}
+                        is_staff: {% firstof user.is_staff "None" %}
+                        is_active: {% firstof user.is_active "None" %}
+                        is_superuser: {% firstof user.is_superuser "None" %}
+                        date_joined: {% firstof user.date_joined "None" %}
+                    </pre>
+                </div>
+            {% endfor %}
+    </div>
+
+{% endblock %}
