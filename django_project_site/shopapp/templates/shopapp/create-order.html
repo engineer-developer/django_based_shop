@@ -10,7 +10,9 @@
     <form method="post">
         {% csrf_token %}
 
-        {{ form.as_p }}
+        <div>
+            {{ form.as_div }}
+        </div>
 
 
     <button type="submit">
@@ -18,4 +20,9 @@
     </button>
     </form>
 
+     <div>
+        <a href="{% url 'shopapp:orders_list' %}">
+            Back to orders list
+        </a>
+    </div>
 {% endblock %}

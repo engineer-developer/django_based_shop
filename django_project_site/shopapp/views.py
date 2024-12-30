@@ -41,6 +41,7 @@ def show_index(request: HttpRequest) -> HttpResponse:
 
 def users_list(request: HttpRequest) -> HttpResponse:
     """Get users list."""
+
     context = {"users": User.objects.all()}
     return render(
         request,
@@ -116,6 +117,8 @@ def orders_list(request: HttpRequest) -> HttpResponse:
 
 
 def create_order(request: HttpRequest) -> HttpResponse:
+    """Create a new order."""
+
     if request.method == "POST":
         form = OrderForm(request.POST)
         if form.is_valid():

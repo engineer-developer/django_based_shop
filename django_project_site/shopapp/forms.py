@@ -1,6 +1,6 @@
 from django import forms
 from django.core import validators
-
+from django.contrib.auth.models import User
 
 from shopapp.models import Product, Order
 
@@ -43,6 +43,20 @@ class OrderForm(forms.ModelForm):
             "products",
         ]
         widgets = {
-            "delivery_address": forms.Textarea(attrs={"rows": 4, "cols": 40}),
+            "delivery_address": forms.Textarea(
+                attrs={
+                    "rows": 4,
+                    "cols": 40,
+                    "placeholder": "Enter delivery address",
+                }
+            ),
+            "promocode": forms.TextInput(attrs={"placeholder": "Enter promo code"}),
+            "user": forms.RadioSelect(attrs={"placeholder": "Enter user"}),
             "products": forms.CheckboxSelectMultiple(attrs={"rows": 4, "cols": 40}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super(OrderForm, self).__init__(*args, **kwargs)
+
+        self.fields["user"].queryset = User.objects.all()
+        self.fields["products"].queryset = Product.objects.all()
