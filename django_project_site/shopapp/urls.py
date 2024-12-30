@@ -6,6 +6,7 @@ from shopapp.views import (
     products_list,
     orders_list,
     create_product,
+    create_order,
     users_list,
 )
 
@@ -19,4 +20,5 @@ urlpatterns = [
     path("products/", products_list, name="products_list"),
     path("products/create/", create_product, name="create_product"),
     path("orders/", orders_list, name="orders_list"),
+    path("orders/create", create_order, name="create_order"),
 ]

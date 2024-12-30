@@ -2,7 +2,7 @@ from django import forms
 from django.core import validators
 
 
-from shopapp.models import Product
+from shopapp.models import Product, Order
 
 
 # Implemented forms.Form
@@ -31,3 +31,18 @@ class ProductForm(forms.ModelForm):
             "description",
             "discount",
         ]
+
+
+class OrderForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = [
+            "delivery_address",
+            "promocode",
+            "user",
+            "products",
+        ]
+        widgets = {
+            "delivery_address": forms.Textarea(attrs={"rows": 4, "cols": 40}),
+            "products": forms.CheckboxSelectMultiple(attrs={"rows": 4, "cols": 40}),
+        }

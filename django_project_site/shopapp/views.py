@@ -4,7 +4,7 @@ from django.contrib.auth.models import Group, User
 from timeit import default_timer
 from datetime import datetime
 
-from shopapp.forms import ProductForm
+from shopapp.forms import ProductForm, OrderForm
 from shopapp.models import Product, Order
 
 
@@ -49,6 +49,17 @@ def users_list(request: HttpRequest) -> HttpResponse:
     )
 
 
+def groups_list(request: HttpRequest) -> HttpResponse:
+    """Get groups list."""
+
+    context = {"groups": Group.objects.prefetch_related("permissions").all()}
+    return render(
+        request,
+        "shopapp/groups-list.html",
+        context=context,
+    )
+
+
 def products_list(request: HttpRequest) -> HttpResponse:
     """Get products list."""
 
@@ -58,7 +69,7 @@ def products_list(request: HttpRequest) -> HttpResponse:
     return render(
         request,
         "shopapp/products-list.html",
-        context,
+        context=context,
     )
 
 
@@ -80,8 +91,8 @@ def create_product(request: HttpRequest) -> HttpResponse:
             return redirect(url)
     else:
         form = ProductForm()
-    context = {"form": form}
 
+    context = {"form": form}
     return render(
         request,
         "shopapp/create-product.html",
@@ -101,4 +112,22 @@ def orders_list(request: HttpRequest) -> HttpResponse:
         request,
         "shopapp/orders-list.html",
         context,
+    )
+
+
+def create_order(request: HttpRequest) -> HttpResponse:
+    if request.method == "POST":
+        form = OrderForm(request.POST)
+        if form.is_valid():
+            form.save()
+            url = reverse("shopapp:orders_list")
+            return redirect(url)
+    else:
+        form = OrderForm()
+
+    context = {"form": form}
+    return render(
+        request,
+        "shopapp/create-order.html",
+        context=context,
     )
