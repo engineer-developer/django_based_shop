@@ -1,0 +1,266 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    background-color: #f6f7f9;
+}
+
+* {
+    font-family: 'Roboto', sans-serif;
+}
+
+a {
+    color: black;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+h1 {
+    font-size: 40px;
+    text-wrap: auto;
+    margin-bottom: 0;
+}
+
+h2 {
+    font-size: xx-large;
+}
+
+.first-block__p {
+    margin-bottom: 30px;
+}
+
+header {
+    height: 90px;
+    padding: 0 40px;
+
+}
+
+header > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-links {
+    width: 50%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+
+.header-links > a {
+    margin-right: 20px;
+}
+
+header span {
+    margin-right: 20px;
+}
+
+.fixed-container {
+    max-width: 1000px;
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.footer_content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.footer-column-1 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.footer-column-1 * {
+    margin-bottom: 10px;
+}
+
+.footer-column-2 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.footer-column-2 * {
+    margin-bottom: 10px;
+}
+
+.footer-column-3 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer-column-3 > :first-child {
+    margin-bottom: 20px;
+}
+
+.social-network-urls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.social-network-urls a {
+    margin: 0 10px;
+}
+
+section {
+    padding: 40px;
+}
+
+.first-block {
+    height: 420px;
+}
+
+.first-block > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    background-image: url("../images/main_img.jpg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: right center;
+}
+
+.services {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.services > div {
+    width: 200px;
+    font-size: 14px;
+}
+
+.services img {
+    width: 130px;
+    margin-bottom: 20px;
+}
+
+.works {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.works > div {
+    display: flex;
+    flex-direction: column;
+}
+
+.work-sample-image {
+    border: 1px solid #9f9f9f;
+    border-radius: 10px;
+    width: 260px;
+    height: 140px;
+    padding: 20px;
+}
+
+.works img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.works p {
+    text-wrap: nowrap;
+    font-size: 12px;
+}
+
+.work-sample-image-block1 {
+    background-color: #f9fc70;
+}
+
+.work-sample-image-block2 {
+    background-color: #98ebe3;
+}
+
+.work-sample-image-block3 {
+    background-color: #ed97b7;
+}
+
+.price-info {
+    background-color: #3d52fe;
+    color: white;
+}
+
+.price-info h2, p {
+    width: 50%;
+    text-wrap: wrap;
+}
+
+.price-info p {
+    font-size: 12px;
+}
+
+.light-button {
+    border: 1px solid #9f9f9f;
+    background-color: transparent;
+
+}
+
+.dark-button {
+    border: 1px solid #3d52fe;
+    background-color: #3d52fe;
+    color: white
+}
+
+button {
+    padding: 10px 30px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+footer {
+    padding: 40px;
+}
+
+.popup-container {
+    background-color: #000000bd;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup {
+    background-color: white;
+    width: 300px;
+    height: 300px;
+    padding: 20px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-input-text {
+    margin: 5px auto;
+}
+
+.popup-submit-button {
+    margin-top: 30px;
+}
+
+.popup-button {
+    padding: 10px 30px;
+    cursor: pointer;
+    border-radius: 5px;
+}
