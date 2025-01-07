@@ -64,6 +64,8 @@ class GroupsListView(View):
 
 
 class ProductDetailsView(DetailView):
+    """Get product details."""
+
     template_name = "shopapp/product-details.html"
     model = Product
     context_object_name = "product"
@@ -100,8 +102,11 @@ def create_product(request: HttpRequest) -> HttpResponse:
     return render(request, "shopapp/create-product.html", context)
 
 
-def orders_list(request: HttpRequest) -> HttpResponse:
-    """Get orders list."""
+class OrderListView(ListView):
+    """Get order list."""
+
+    queryset = Order.objects.select_related("user").prefetch_related("products")
+    context_object_name = "orders"
 
     context = {
         "orders": Order.objects.select_related("user")
