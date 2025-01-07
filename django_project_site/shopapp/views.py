@@ -5,7 +5,7 @@ from django.contrib.auth.models import Group, User
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render, reverse, get_object_or_404
 from django.views import View
-from django.views.generic import TemplateView, ListView
+from django.views.generic import TemplateView, ListView, DetailView
 
 from shopapp.forms import OrderForm, ProductForm, GroupForm
 from shopapp.models import Order, Product
@@ -63,14 +63,10 @@ class GroupsListView(View):
         return redirect(request.path)
 
 
-class ProductDetailsView(View):
-    def get(self, request: HttpRequest, pk: int) -> HttpResponse:
-        """Get product details."""
-        product = get_object_or_404(Product, pk=pk)
-        context = {
-            "product": product,
-        }
-        return render(request, "shopapp/product-details.html", context)
+class ProductDetailsView(DetailView):
+    template_name = "shopapp/product-details.html"
+    model = Product
+    context_object_name = "product"
 
 
 class ProductsListView(ListView):
