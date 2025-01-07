@@ -38,7 +38,10 @@
             </div>
 
             <div>
-                It is - {% now "H:i" %}
+                {% load tz %}
+                {% timezone "Asia/Yekaterinburg" %}
+                    It is - {% now "H:i" %}
+                {% endtimezone %}
             </div>
         {% endblock %}
     </footer>

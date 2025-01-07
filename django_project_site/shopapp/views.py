@@ -20,25 +20,22 @@ def show_greetings(request: HttpRequest) -> HttpResponse:
     return HttpResponse(content="<h1>Have a nice day!</h1>")
 
 
-def show_index(request: HttpRequest) -> HttpResponse:
-    """Get index page."""
+class ShopIndexView(View):
+    def get(self, request: HttpRequest) -> HttpResponse:
+        """Get index page."""
 
-    products = [
-        ("laptop", 1999),
-        ("desctop", 2999),
-        ("smartphone", 999),
-        ("mouse", 99),
-    ]
-    context = {
-        "time_running": default_timer(),
-        "products": products,
-        "current_date": datetime.now(),
-    }
-    return render(
-        request,
-        "shopapp/shop-index.html",
-        context=context,
-    )
+        products = [
+            ("laptop", 1999),
+            ("desctop", 2999),
+            ("smartphone", 999),
+            ("mouse", 99),
+        ]
+        context = {
+            "time_running": default_timer(),
+            "products": products,
+            "current_date": datetime.now(),
+        }
+        return render(request, "shopapp/shop-index.html", context=context)
 
 
 def users_list(request: HttpRequest) -> HttpResponse:
