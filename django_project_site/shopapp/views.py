@@ -1,11 +1,13 @@
-from django.http import HttpResponse, HttpRequest
-from django.shortcuts import render, reverse, redirect
-from django.contrib.auth.models import Group, User
-from timeit import default_timer
 from datetime import datetime
+from timeit import default_timer
 
-from shopapp.forms import ProductForm, OrderForm
-from shopapp.models import Product, Order
+from django.contrib.auth.models import Group, User
+from django.http import HttpRequest, HttpResponse
+from django.shortcuts import redirect, render, reverse, get_object_or_404
+from django.views import View
+
+from shopapp.forms import OrderForm, ProductForm, GroupForm
+from shopapp.models import Order, Product
 
 
 def show_greetings(request: HttpRequest) -> HttpResponse:
@@ -43,11 +45,7 @@ def users_list(request: HttpRequest) -> HttpResponse:
     """Get users list."""
 
     context = {"users": User.objects.all()}
-    return render(
-        request,
-        "shopapp/users-list.html",
-        context=context,
-    )
+    return render(request, "shopapp/users-list.html", context=context)
 
 
 def groups_list(request: HttpRequest) -> HttpResponse:
@@ -67,11 +65,7 @@ def products_list(request: HttpRequest) -> HttpResponse:
     context = {
         "products": Product.objects.all(),
     }
-    return render(
-        request,
-        "shopapp/products-list.html",
-        context=context,
-    )
+    return render(request, "shopapp/products-list.html", context=context)
 
 
 def create_product(request: HttpRequest) -> HttpResponse:
@@ -94,11 +88,7 @@ def create_product(request: HttpRequest) -> HttpResponse:
         form = ProductForm()
 
     context = {"form": form}
-    return render(
-        request,
-        "shopapp/create-product.html",
-        context,
-    )
+    return render(request, "shopapp/create-product.html", context)
 
 
 def orders_list(request: HttpRequest) -> HttpResponse:
@@ -109,11 +99,7 @@ def orders_list(request: HttpRequest) -> HttpResponse:
         .prefetch_related("products")
         .all(),
     }
-    return render(
-        request,
-        "shopapp/orders-list.html",
-        context,
-    )
+    return render(request, "shopapp/orders-list.html", context)
 
 
 def create_order(request: HttpRequest) -> HttpResponse:
@@ -129,8 +115,4 @@ def create_order(request: HttpRequest) -> HttpResponse:
         form = OrderForm()
 
     context = {"form": form}
-    return render(
-        request,
-        "shopapp/create-order.html",
-        context=context,
-    )
+    return render(request, "shopapp/create-order.html", context=context)
