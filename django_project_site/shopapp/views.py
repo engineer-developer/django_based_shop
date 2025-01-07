@@ -10,6 +10,8 @@ from django.views.generic import (
     ListView,
     DetailView,
     CreateView,
+    UpdateView,
+)
 
 from shopapp.forms import OrderForm, ProductForm, GroupForm
 from shopapp.models import Order, Product
@@ -88,6 +90,18 @@ class ProductCreateView(CreateView):
     fields = "name", "price", "description", "discount"
     success_url = reverse_lazy("shopapp:products_list")
     template_name = "shopapp/product_form.html"
+
+
+class ProductUpdateView(UpdateView):
+    model = Product
+    fields = "name", "price", "description", "discount"
+    template_name_suffix = "_update_form"
+
+    def get_success_url(self):
+        return reverse(
+            "shopapp:product_details",
+            kwargs={"pk": self.object.pk},
+        )
 
 
 def create_product(request: HttpRequest) -> HttpResponse:
