@@ -45,15 +45,23 @@ def users_list(request: HttpRequest) -> HttpResponse:
     return render(request, "shopapp/users-list.html", context=context)
 
 
-def groups_list(request: HttpRequest) -> HttpResponse:
-    """Get groups list."""
+class GroupsListView(View):
+    def get(self, request: HttpRequest) -> HttpResponse:
+        """Get groups list."""
 
-    context = {"groups": Group.objects.prefetch_related("permissions").all()}
-    return render(
-        request,
-        "shopapp/groups-list.html",
-        context=context,
-    )
+        context = {
+            "groups": Group.objects.prefetch_related("permissions").all(),
+            "form": GroupForm(),
+        }
+        return render(request, "shopapp/groups-list.html", context=context)
+
+    def post(self, request: HttpRequest):
+        form = GroupForm(request.POST)
+        if form.is_valid():
+            form.save()
+        return redirect(request.path)
+
+
 
 
 def products_list(request: HttpRequest) -> HttpResponse:

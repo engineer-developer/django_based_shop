@@ -1,6 +1,6 @@
 from django import forms
 from django.core import validators
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 
 from shopapp.models import Product, Order
 
@@ -60,3 +60,11 @@ class OrderForm(forms.ModelForm):
 
         self.fields["user"].queryset = User.objects.all()
         self.fields["products"].queryset = Product.objects.all()
+
+
+class GroupForm(forms.ModelForm):
+    class Meta:
+        model = Group
+        fields = [
+            "name",
+        ]
