@@ -108,12 +108,11 @@ class OrderListView(ListView):
     queryset = Order.objects.select_related("user").prefetch_related("products")
     context_object_name = "orders"
 
-    context = {
-        "orders": Order.objects.select_related("user")
-        .prefetch_related("products")
-        .all(),
-    }
-    return render(request, "shopapp/orders-list.html", context)
+
+class OrderDetailsView(DetailView):
+    """Get order details."""
+
+    queryset = Order.objects.select_related("user").prefetch_related("products")
 
 
 def create_order(request: HttpRequest) -> HttpResponse:

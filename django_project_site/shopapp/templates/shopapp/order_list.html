@@ -27,6 +27,7 @@
         {% if orders %}
             {% for order in orders %}
                 <div class="order-block">
+                    <a  href="{% url "shopapp:order_details" pk=order.pk %}"><p>Order №{{ order.pk }}</p></a>
                     <p>Order by: {% firstof order.user.first_name order.user.username %} </p>
                     <p>Delivery address: {{ order.delivery_address }} </p>
                     <p>Promocode: <code>{% firstof order.promocode "None" %}</code> </p>
