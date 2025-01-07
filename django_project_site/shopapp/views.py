@@ -2,7 +2,7 @@ from datetime import datetime
 from timeit import default_timer
 
 from django.contrib.auth.models import Group, User
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render, reverse
 from django.urls import reverse_lazy
 from django.views import View
@@ -11,6 +11,7 @@ from django.views.generic import (
     DetailView,
     CreateView,
     UpdateView,
+    DeleteView,
 )
 
 from shopapp.forms import OrderForm, ProductForm, GroupForm
@@ -81,7 +82,8 @@ class ProductsListView(ListView):
     """Get products list."""
 
     template_name = "shopapp/products-list.html"
-    model = Product
+    # model = Product
+    queryset = Product.objects.filter(archived=False)
     context_object_name = "products"
 
 
@@ -90,6 +92,29 @@ class ProductCreateView(CreateView):
     fields = "name", "price", "description", "discount"
     success_url = reverse_lazy("shopapp:products_list")
     template_name = "shopapp/product_form.html"
+
+
+# def create_product(request: HttpRequest) -> HttpResponse:
+#     """Create a new product."""
+#
+#     if request.method == "POST":
+#         form = ProductForm(request.POST)
+#         if form.is_valid():
+#             # name = form.cleaned_data["name"]
+#             # price = form.cleaned_data["price"]
+#             # description = form.cleaned_data["description"]
+#             # Product.objects.create(name=name, price=price, description=description)
+#
+#             # Product.objects.create(**form.cleaned_data)
+#             form.save()
+#
+#             url = reverse("shopapp:products_list")
+#             return redirect(url)
+#     else:
+#         form = ProductForm()
+#
+#     context = {"form": form}
+#     return render(request, "shopapp/create-product.html", context)
 
 
 class ProductUpdateView(UpdateView):
@@ -104,27 +129,25 @@ class ProductUpdateView(UpdateView):
         )
 
 
-def create_product(request: HttpRequest) -> HttpResponse:
-    """Create a new product."""
+class ArchiveProductView(DeleteView):
+    """Archive a product."""
 
-    if request.method == "POST":
-        form = ProductForm(request.POST)
-        if form.is_valid():
-            # name = form.cleaned_data["name"]
-            # price = form.cleaned_data["price"]
-            # description = form.cleaned_data["description"]
-            # Product.objects.create(name=name, price=price, description=description)
+    model = Product
+    success_url = reverse_lazy("shopapp:products_list")
+    template_name_suffix = "_confirm_archive"
 
-            # Product.objects.create(**form.cleaned_data)
-            form.save()
+    def form_valid(self, form):
+        success_url = self.get_success_url()
+        self.object.archived = True
+        self.object.save()
+        return HttpResponseRedirect(success_url)
 
-            url = reverse("shopapp:products_list")
-            return redirect(url)
-    else:
-        form = ProductForm()
 
-    context = {"form": form}
-    return render(request, "shopapp/create-product.html", context)
+class DeleteProductView(DeleteView):
+    """Delete a product."""
+
+    model = Product
+    success_url = reverse_lazy("shopapp:products_list")
 
 
 class OrderListView(ListView):
