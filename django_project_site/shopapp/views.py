@@ -5,6 +5,7 @@ from django.contrib.auth.models import Group, User
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render, reverse, get_object_or_404
 from django.views import View
+from django.views.generic import TemplateView
 
 from shopapp.forms import OrderForm, ProductForm, GroupForm
 from shopapp.models import Order, Product
@@ -48,7 +49,6 @@ def users_list(request: HttpRequest) -> HttpResponse:
 class GroupsListView(View):
     def get(self, request: HttpRequest) -> HttpResponse:
         """Get groups list."""
-
         context = {
             "groups": Group.objects.prefetch_related("permissions").all(),
             "form": GroupForm(),
@@ -56,6 +56,7 @@ class GroupsListView(View):
         return render(request, "shopapp/groups-list.html", context=context)
 
     def post(self, request: HttpRequest):
+        """Create new group."""
         form = GroupForm(request.POST)
         if form.is_valid():
             form.save()
@@ -64,6 +65,7 @@ class GroupsListView(View):
 
 class ProductDetailsView(View):
     def get(self, request: HttpRequest, pk: int) -> HttpResponse:
+        """Get product details."""
         product = get_object_or_404(Product, pk=pk)
         context = {
             "product": product,
@@ -71,13 +73,15 @@ class ProductDetailsView(View):
         return render(request, "shopapp/product-details.html", context)
 
 
-def products_list(request: HttpRequest) -> HttpResponse:
+class ProductsListView(TemplateView):
     """Get products list."""
 
-    context = {
-        "products": Product.objects.all(),
-    }
-    return render(request, "shopapp/products-list.html", context=context)
+    template_name = "shopapp/products-list.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["products"] = Product.objects.all()
+        return context
 
 
 def create_product(request: HttpRequest) -> HttpResponse:
