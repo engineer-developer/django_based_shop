@@ -62,6 +62,13 @@ class GroupsListView(View):
         return redirect(request.path)
 
 
+class ProductDetailsView(View):
+    def get(self, request: HttpRequest, pk: int) -> HttpResponse:
+        product = get_object_or_404(Product, pk=pk)
+        context = {
+            "product": product,
+        }
+        return render(request, "shopapp/product-details.html", context)
 
 
 def products_list(request: HttpRequest) -> HttpResponse:
