@@ -8,32 +8,40 @@
 
 {% block main %}
     <style>
-        .product-block {
-            border: 2px black solid;
-            border-radius: 5px;
-            background: #63dced;
-            margin: 2px;
-            padding: 2px;
-            display: inline-table;
-        }
+    .products-block {
+        text-align: center;
+    }
+    .product-block {
+        border: 2px black solid;
+        border-radius: 5px;
+        background-color: #cbf0ff;
+        margin: 2px;
+        padding: 2px;
+        display: inline-block;
+    }
+    .product-block p {
+        margin: 0 1px;
+    }
+
     </style>
 
-    <h1>Products:</h1>
+    <div class="products-block">
+        <h1>Products:</h1>
 
-    {% if products %}
-        <div>
-            {% for product in products %}
-            <div class="product-block">
-                <p><a href="{% url 'shopapp:product_details' pk=product.pk %}">
-                    Name: {{ product.name }}</a></p>
-                <p>Price: {{ product.price }}</p>
-                <p>Discount: {% firstof product.discount "no discount" %} </p>
+        {% if products %}
+            <div>
+                {% for product in products %}
+                    <div class="product-block">
+                        <p><a href="{% url 'shopapp:product_details' pk=product.pk %}">
+                            Name: {{ product.name }}</a></p>
+                        <p>Price: {{ product.price }}</p>
+                        <p>Discount: {% firstof product.discount "no discount" %} </p>
+                    </div>
+                {% endfor %}
             </div>
-            {% endfor %}
-        </div>
-    {% else %}
-        <h3>No products yet</h3>
-    {% endif %}
+        {% else %}
+            <h3>No products yet</h3>
+        {% endif %}</div>
 
     <div>
         <a href="{% url 'shopapp:product_create' %}">

@@ -8,48 +8,59 @@
 
 {% block main %}
     <style>
+        .orders-block {
+            text-align: center;
+        }
         .order-block {
             border: 2px black solid;
             border-radius: 5px;
-            background: #a5efa7;
+            background: #c4ffc4;
             margin: 2px;
             padding: 2px;
+            text-align: left;
             display: inline-grid;
         }
-        h4 {
-            color: red;
+        .order-block p {
+        margin: 0 1px;
         }
+
+        .order-block a {
+            margin: 0 auto;
+        }
+
     </style>
 
-    <h1>Orders:</h1>
-    <div>
+    <div class="orders-block">
+        <h1>Orders:</h1>
+        <div>
+            {% if orders %}
+                {% for order in orders %}
+                    <div class="order-block">
+                        <a href="{% url "shopapp:order_details" pk=order.pk %}"><p>Order №{{ order.pk }}</p></a>
+                        <p>Order by: {% firstof order.user.first_name order.user.username %} </p>
+                        <p>Delivery address: {{ order.delivery_address }} </p>
+                        <p>Promocode: <code>{% firstof order.promocode "None" %}</code></p>
+                        <p>Created at: {{ order.created_at }} </p>
+                        <div>
+                            Products in order:
+                            <ul>
+                                {% for product in order.products.all %}
+                                    <li>{{ product.name }} for ${{ product.price }}</li>
+                                {% endfor %}
 
-        {% if orders %}
-            {% for order in orders %}
-                <div class="order-block">
-                    <a  href="{% url "shopapp:order_details" pk=order.pk %}"><p>Order №{{ order.pk }}</p></a>
-                    <p>Order by: {% firstof order.user.first_name order.user.username %} </p>
-                    <p>Delivery address: {{ order.delivery_address }} </p>
-                    <p>Promocode: <code>{% firstof order.promocode "None" %}</code> </p>
-                    <p>Created at: {{ order.created_at }} </p>
-                    <div>
-                        Products in order:
-                        <ul>
-                            {% for product in order.products.all %}
-                                <li>{{ product.name }} for ${{ product.price }}</li>
-                            {% endfor %}
-
-                        </ul>
+                            </ul>
+                        </div>
+                        <div>
+                            <strong>Total price: ${{ order.total_price }}</strong>
+                        </div>
                     </div>
-                    <div>
-                        <strong>Total price: ${{ order.total_price }}</strong>
-                    </div>
-                </div>
-            {% endfor %}
+                {% endfor %}
 
-        {% else %}
-            <h4>No orders yet</h4>
-        {% endif %}
+            {% else %}
+                <h4>No orders yet</h4>
+            {% endif %}
+        </div>
+    </div>
 
     <div>
         <a href="{% url "shopapp:create_order" %}">
@@ -57,5 +68,4 @@
         </a>
     </div>
 
-    </div>
 {% endblock %}
