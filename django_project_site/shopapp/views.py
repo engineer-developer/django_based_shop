@@ -163,6 +163,18 @@ class OrderDetailsView(DetailView):
     queryset = Order.objects.select_related("user").prefetch_related("products")
 
 
+class OrderCreateView(CreateView):
+    """Create a new order."""
+
+    model = Order
+    form_class = OrderForm
+    # fields = "user", "delivery_address", "products", "promocode"
+    success_url = reverse_lazy("shopapp:orders_list")
+
+    # def get_form(self, form_class=OrderForm):
+    #     form = super().get_form(form_class)
+
+
 def create_order(request: HttpRequest) -> HttpResponse:
     """Create a new order."""
 
