@@ -11,8 +11,4 @@ urlpatterns = [
     path("get/", process_get_view, name="get-view"),
     path("bio/", user_form, name="user-form"),
     path("upload/", handle_file_upload, name="file-upload"),
-    path(
-        "favicon.ico",
-        RedirectView.as_view(url=staticfiles_storage.url("favicon.ico")),
-    ),
 ]

@@ -10,15 +10,21 @@
     <style>
         .orders-block {
             text-align: center;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: stretch;
         }
         .order-block {
+            width: 220px;
             border: 2px black solid;
             border-radius: 5px;
             background: #c4ffc4;
             margin: 2px;
             padding: 2px;
             text-align: left;
-            display: inline-grid;
+            font-size: small;
         }
         .order-block p {
         margin: 0 1px;
@@ -26,17 +32,22 @@
 
         .order-block a {
             margin: 0 auto;
+            text-align: center;
+        }
+
+        h1 {
+            text-align: center;
         }
 
     </style>
 
+    <h1>Orders:</h1>
     <div class="orders-block">
-        <h1>Orders:</h1>
-        <div>
             {% if orders %}
                 {% for order in orders %}
                     <div class="order-block">
-                        <a href="{% url "shopapp:order_details" pk=order.pk %}"><p>Order №{{ order.pk }}</p></a>
+                        <a href="{% url "shopapp:order_detail" pk=order.pk %}"><p>Order №{{ order.pk }}</p></a>
+                        <br>
                         <p>Order by: {% firstof order.user.first_name order.user.username %} </p>
                         <p>Delivery address: {{ order.delivery_address }} </p>
                         <p>Promocode: <code>{% firstof order.promocode "None" %}</code></p>
@@ -45,7 +56,12 @@
                             Products in order:
                             <ul>
                                 {% for product in order.products.all %}
-                                    <li>{{ product.name }} for ${{ product.price }}</li>
+                                    <li>
+                                        <a href="{% url 'shopapp:product_details' pk=product.pk %}">
+                                            {{ product.name }}
+                                        </a>
+                                        for ${{ product.price }}
+                                    </li>
                                 {% endfor %}
 
                             </ul>
@@ -59,7 +75,6 @@
             {% else %}
                 <h4>No orders yet</h4>
             {% endif %}
-        </div>
     </div>
 
     <div>

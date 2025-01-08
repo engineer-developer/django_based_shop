@@ -2,6 +2,7 @@ from datetime import datetime
 from timeit import default_timer
 
 from django.contrib.auth.models import Group, User
+from django.db.models.aggregates import Count
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render, reverse
 from django.urls import reverse_lazy
@@ -153,14 +154,22 @@ class DeleteProductView(DeleteView):
 class OrderListView(ListView):
     """Get order list."""
 
-    queryset = Order.objects.select_related("user").prefetch_related("products")
+    # Get all orders with count of products greater then 0
+    queryset = (
+        Order.objects.select_related("user")
+        .prefetch_related("products")
+        .annotate(products_count=Count("products"))
+        .filter(products_count__gt=0)
+    )
+    # model = Order
     context_object_name = "orders"
 
 
 class OrderDetailsView(DetailView):
     """Get order details."""
 
-    queryset = Order.objects.select_related("user").prefetch_related("products")
+    model = Order
+    context_object_name = "order"
 
 
 class OrderCreateView(CreateView):
@@ -171,21 +180,39 @@ class OrderCreateView(CreateView):
     # fields = "user", "delivery_address", "products", "promocode"
     success_url = reverse_lazy("shopapp:orders_list")
 
-    # def get_form(self, form_class=OrderForm):
-    #     form = super().get_form(form_class)
+
+# def create_order(request: HttpRequest) -> HttpResponse:
+#     """Create a new order."""
+#
+#     if request.method == "POST":
+#         form = OrderForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             url = reverse("shopapp:orders_list")
+#             return redirect(url)
+#     else:
+#         form = OrderForm()
+#
+#     context = {"form": form}
+#     return render(request, "shopapp/create-order.html", context=context)
 
 
-def create_order(request: HttpRequest) -> HttpResponse:
-    """Create a new order."""
+class OrderUpdateView(UpdateView):
+    """Update an order."""
 
-    if request.method == "POST":
-        form = OrderForm(request.POST)
-        if form.is_valid():
-            form.save()
-            url = reverse("shopapp:orders_list")
-            return redirect(url)
-    else:
-        form = OrderForm()
+    model = Order
+    form_class = OrderForm
+    template_name_suffix = "_update_form"
 
-    context = {"form": form}
-    return render(request, "shopapp/create-order.html", context=context)
+    def get_success_url(self):
+        return reverse(
+            "shopapp:order_detail",
+            kwargs={"pk": self.object.pk},
+        )
+
+
+class OrderDeleteView(DeleteView):
+    """Delete an order."""
+
+    model = Order
+    success_url = reverse_lazy("shopapp:orders_list")

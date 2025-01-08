@@ -6,6 +6,12 @@
 
 
 {% block main %}
+    <style>
+        .order-block p {
+            margin: 0;
+        }
+    </style>
+
 	<h1>Order №{{ object.pk }}</h1>
     <div class="order-block">
         <p>Order by: {% firstof object.user.first_name object.user.username %} </p>
@@ -25,6 +31,14 @@
             <strong>Total price: ${{ object.total_price }}</strong>
         </div>
     </div>
+    <br>
+    <div>
+        <a href="{% url 'shopapp:order_update' pk=object.pk %}">Update order</a>
+    </div>
+    <div>
+        <a href="{% url 'shopapp:order_delete' pk=object.pk %}">Delete order</a>
+    </div>
+    <br>
     <div>
         <a href="{% url "shopapp:orders_list" %}">Back to orders</a>
     </div>

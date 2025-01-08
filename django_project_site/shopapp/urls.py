@@ -1,8 +1,11 @@
+from django.contrib.staticfiles.storage import staticfiles_storage
 from django.urls import path
+from django.views.generic import RedirectView
+
 from shopapp.views import (
     show_greetings,
     # create_product,
-    create_order,
+    # create_order,
     users_list,
     ShopIndexView,
     GroupsListView,
@@ -15,6 +18,8 @@ from shopapp.views import (
     DeleteProductView,
     ArchiveProductView,
     OrderCreateView,
+    OrderUpdateView,
+    OrderDeleteView,
 )
 
 app_name = "shopapp"
@@ -39,7 +44,9 @@ urlpatterns = [
         "products/<int:pk>/delete/", DeleteProductView.as_view(), name="product_delete"
     ),
     path("orders/", OrderListView.as_view(), name="orders_list"),
-    path("orders/<int:pk>/", OrderDetailsView.as_view(), name="order_details"),
     path("orders/create", OrderCreateView.as_view(), name="order_create"),
     # path("orders/create", create_order, name="create_order"),
+    path("orders/<int:pk>/", OrderDetailsView.as_view(), name="order_detail"),
+    path("orders/<int:pk>/update/", OrderUpdateView.as_view(), name="order_update"),
+    path("orders/<int:pk>/delete/", OrderDeleteView.as_view(), name="order_delete"),
 ]
