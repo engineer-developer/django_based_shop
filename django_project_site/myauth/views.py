@@ -28,7 +28,7 @@ def login_view(request: HttpRequest) -> HttpResponse:
 
 
 class CustomLoginView(LoginView):
-    """Implement login view"""
+    """Implement login view via class-based view"""
 
     template_name = "myauth/login.html"
     redirect_authenticated_user = True
@@ -49,3 +49,17 @@ def get_cookie_view(request: HttpRequest) -> HttpResponse:
     key = "fizz"
     value = request.COOKIES.get(key, "default value")
     return HttpResponse(f"Cookie with key {key!r} has value {value!r}")
+
+
+def set_session_view(request: HttpRequest) -> HttpResponse:
+    """Set session"""
+
+    request.session["foobar"] = "spameggs"
+    return HttpResponse("Session set")
+
+
+def get_session_view(request: HttpRequest) -> HttpResponse:
+    """Get session"""
+
+    value = request.session.get("foobar", "default")
+    return HttpResponse(f"Session value: {value!r}")
