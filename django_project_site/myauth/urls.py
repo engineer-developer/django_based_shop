@@ -15,6 +15,6 @@ urlpatterns = [
     # path("login/", login_view, name="login"),
     path("login/", login_view, name="login"),
     path("custom_login/", CustomLoginView.as_view(), name="custom_login"),
-    path("cookie/set/", set_cookie_view, name="set_cookie"),
-    path("cookie/get/", get_cookie_view, name="get_cookie"),
+    path("cookie/set/", set_cookie_view, name="cookie_set"),
+    path("cookie/get/", get_cookie_view, name="cookie_get"),
 ]

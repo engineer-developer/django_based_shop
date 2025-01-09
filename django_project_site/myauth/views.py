@@ -48,4 +48,4 @@ def get_cookie_view(request: HttpRequest) -> HttpResponse:
 
     key = "fizz"
     value = request.COOKIES.get(key, "default value")
-    return HttpResponse(f"Cookie with key '{key}' has value '{value}'")
+    return HttpResponse(f"Cookie with key {key!r} has value {value!r}")
