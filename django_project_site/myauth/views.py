@@ -1,10 +1,10 @@
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.views import LoginView
 
 
-def login_view(request: HttpRequest):
+def login_view(request: HttpRequest) -> HttpResponse:
     """Implement login view"""
 
     if request.method == "GET":
@@ -33,3 +33,12 @@ class CustomLoginView(LoginView):
     template_name = "myauth/login.html"
     redirect_authenticated_user = True
     next_page = "/admin/"
+
+
+def set_cookie_view(request: HttpRequest) -> HttpResponse:
+    """Set cookie"""
+
+    response = HttpResponse("Cookie set")
+    response.set_cookie(key="fizz", value="buzz", max_age=3600)
+    return response
+

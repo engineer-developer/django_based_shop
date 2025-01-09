@@ -3,6 +3,7 @@ from django.urls import path
 from myauth.views import (
     login_view,
     CustomLoginView,
+    set_cookie_view,
 )
 
 
@@ -13,4 +14,5 @@ urlpatterns = [
     # path("login/", login_view, name="login"),
     path("login/", login_view, name="login"),
     path("custom_login/", CustomLoginView.as_view(), name="custom_login"),
+    path("set_cookie/", set_cookie_view, name="set_cookie"),
 ]
