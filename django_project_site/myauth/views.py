@@ -1,7 +1,8 @@
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, LogoutView
+from django.urls import reverse, reverse_lazy
 
 
 def login_view(request: HttpRequest) -> HttpResponse:
@@ -33,6 +34,29 @@ class CustomLoginView(LoginView):
     template_name = "myauth/login.html"
     redirect_authenticated_user = True
     next_page = "/admin/"
+
+
+def logout_view(request: HttpRequest) -> HttpResponse:
+    """Implement logout view"""
+
+    logout(request)
+    return redirect(reverse("myauth:login"))
+
+
+class CustomLogoutView(LogoutView):
+    """Implement logout view via class-based view"""
+
+    http_method_names = ["get"]
+    next_page = reverse_lazy("myauth:custom_login")
+
+    def get(self, request, *args, **kwargs):
+        """Logout may be done via GET."""
+        logout(request)
+        redirect_to = self.get_success_url()
+        if redirect_to != request.get_full_path():
+            # Redirect to target page once the session has been cleared.
+            return HttpResponseRedirect(redirect_to)
+        return super().get(request, *args, **kwargs)
 
 
 def set_cookie_view(request: HttpRequest) -> HttpResponse:
