@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    {% load static %}
+    <link rel="icon" href="{% static 'shopapp/favicon.ico' %}" type="image/x-icon">
     <title>
         {% block title %}
             Base title
@@ -38,7 +40,10 @@
             </div>
 
             <div>
-                It is - {% now "H:i" %}
+                {% load tz %}
+                {% timezone "Asia/Yekaterinburg" %}
+                    It is - {% now "H:i" %}
+                {% endtimezone %}
             </div>
         {% endblock %}
     </footer>
