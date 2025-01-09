@@ -42,3 +42,10 @@ def set_cookie_view(request: HttpRequest) -> HttpResponse:
     response.set_cookie(key="fizz", value="buzz", max_age=3600)
     return response
 
+
+def get_cookie_view(request: HttpRequest) -> HttpResponse:
+    """Get cookie"""
+
+    key = "fizz"
+    value = request.COOKIES.get(key, "default value")
+    return HttpResponse(f"Cookie with key '{key}' has value '{value}'")
