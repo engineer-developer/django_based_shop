@@ -92,6 +92,11 @@ class CustomLogoutView(LogoutView):
         return super().get(request, *args, **kwargs)
 
 
+def check_is_superuser(user):
+    return True if user.is_superuser else False
+
+
+@user_passes_test(test_func=check_is_superuser, login_url="/myauth/not-authorized/")
 def set_cookie_view(request: HttpRequest) -> HttpResponse:
     """Set cookie"""
 
@@ -122,3 +127,9 @@ def get_session_view(request: HttpRequest) -> HttpResponse:
 
     value = request.session.get("foobar", "default")
     return HttpResponse(f"Session value: {value!r}")
+
+
+def not_authorized_view(request: HttpRequest) -> HttpResponse:
+    """Not authorized view"""
+
+    return render(request, "myauth/not_authorized.html")

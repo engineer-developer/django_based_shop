@@ -11,6 +11,7 @@ from myauth.views import (
     CustomLogoutView,
     AboutMeView,
     RegistrationView,
+    not_authorized_view,
 )
 
 
@@ -28,4 +29,5 @@ urlpatterns = [
     path("cookie/get/", get_cookie_view, name="cookie_get"),
     path("session/set/", set_session_view, name="session_set"),
     path("session/get/", get_session_view, name="session_get"),
+    path("not-authorized/", not_authorized_view, name="not_authorized"),
 ]
