@@ -75,7 +75,7 @@ class CustomLogoutView(LogoutView):
     """Implement logout view via class-based view"""
 
     http_method_names = ["get"]
-    next_page = reverse_lazy("myauth:custom_login")
+    next_page = reverse_lazy("myauth:login")
 
     def get(self, request, *args, **kwargs):
         """Logout may be done via GET."""
