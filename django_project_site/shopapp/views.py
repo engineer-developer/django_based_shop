@@ -14,6 +14,7 @@ from django.views.generic import (
     UpdateView,
     DeleteView,
 )
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from shopapp.forms import OrderForm, ProductForm, GroupForm
 from shopapp.models import Order, Product
@@ -35,7 +36,7 @@ class ShopIndexView(View):
 
         products = [
             ("laptop", 1999),
-            ("desctop", 2999),
+            ("desktop", 2999),
             ("smartphone", 999),
             ("mouse", 99),
         ]
@@ -151,7 +152,7 @@ class DeleteProductView(DeleteView):
     success_url = reverse_lazy("shopapp:products_list")
 
 
-class OrderListView(ListView):
+class OrderListView(LoginRequiredMixin, ListView):
     """Get order list."""
 
     # Get all orders with count of products greater then 0
