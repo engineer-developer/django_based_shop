@@ -161,6 +161,7 @@ class OrderListView(LoginRequiredMixin, ListView):
         .prefetch_related("products")
         .annotate(products_count=Count("products"))
         .filter(products_count__gt=0)
+        .order_by("pk")
     )
     # model = Order
     context_object_name = "orders"
