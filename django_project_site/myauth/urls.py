@@ -24,6 +24,7 @@ urlpatterns = [
     path("logout/", logout_view, name="logout"),
     path("custom_logout/", CustomLogoutView.as_view(), name="custom_logout"),
     path("about-me/", AboutMeView.as_view(), name="about_me"),
+    path("register/", RegistrationView.as_view(), name="register"),
     path("cookie/set/", set_cookie_view, name="cookie_set"),
     path("cookie/get/", get_cookie_view, name="cookie_get"),
     path("session/set/", set_session_view, name="session_set"),
