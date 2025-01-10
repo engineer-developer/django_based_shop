@@ -2,7 +2,12 @@ from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.views import LoginView, LogoutView
+from django.views.generic import TemplateView, CreateView
 from django.urls import reverse, reverse_lazy
+
+
+class AboutMeView(TemplateView):
+    template_name = "myauth/about-me.html"
 
 
 def login_view(request: HttpRequest) -> HttpResponse:
@@ -19,7 +24,7 @@ def login_view(request: HttpRequest) -> HttpResponse:
     user = authenticate(request, username=username, password=password)
     if user is not None:
         login(request, user)
-        return redirect("/admin/")
+        return redirect(reverse("myauth:about_me"))
 
     return render(
         request,

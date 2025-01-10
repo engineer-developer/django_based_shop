@@ -9,6 +9,8 @@ from myauth.views import (
     get_session_view,
     logout_view,
     CustomLogoutView,
+    AboutMeView,
+    RegistrationView,
 )
 
 
@@ -21,6 +23,7 @@ urlpatterns = [
     path("custom_login/", CustomLoginView.as_view(), name="custom_login"),
     path("logout/", logout_view, name="logout"),
     path("custom_logout/", CustomLogoutView.as_view(), name="custom_logout"),
+    path("about-me/", AboutMeView.as_view(), name="about_me"),
     path("cookie/set/", set_cookie_view, name="cookie_set"),
     path("cookie/get/", get_cookie_view, name="cookie_get"),
     path("session/set/", set_session_view, name="session_set"),
