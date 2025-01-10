@@ -108,6 +108,7 @@ def get_cookie_view(request: HttpRequest) -> HttpResponse:
     return HttpResponse(f"Cookie with key {key!r} has value {value!r}")
 
 
+@permission_required("myauth.view_profile", raise_exception=True)
 def set_session_view(request: HttpRequest) -> HttpResponse:
     """Set session"""
 
