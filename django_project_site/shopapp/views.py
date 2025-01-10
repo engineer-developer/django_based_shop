@@ -15,6 +15,11 @@ from django.views.generic import (
     DeleteView,
 )
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import (
+    LoginRequiredMixin,
+    PermissionRequiredMixin,
+    UserPassesTestMixin,
+)
 
 from shopapp.forms import OrderForm, ProductForm, GroupForm
 from shopapp.models import Order, Product
@@ -167,9 +172,10 @@ class OrderListView(LoginRequiredMixin, ListView):
     context_object_name = "orders"
 
 
-class OrderDetailsView(DetailView):
+class OrderDetailsView(PermissionRequiredMixin, DetailView):
     """Get order details."""
 
+    permission_required = "shopapp.view_order"
     model = Order
     context_object_name = "order"
 
