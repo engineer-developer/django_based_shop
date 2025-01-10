@@ -6,6 +6,8 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.views.generic import TemplateView, CreateView
 from django.urls import reverse, reverse_lazy
 
+from .models import Profile
+
 
 class AboutMeView(TemplateView):
     template_name = "myauth/about-me.html"
@@ -18,6 +20,8 @@ class RegistrationView(CreateView):
 
     def form_valid(self, form):
         response = super().form_valid(form)
+        Profile.objects.create(user=self.object)
+
         username = form.cleaned_data.get("username")
         password = form.cleaned_data.get("password1")
         user = authenticate(
