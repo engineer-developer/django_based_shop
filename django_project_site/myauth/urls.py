@@ -19,10 +19,9 @@ app_name = "myauth"
 
 urlpatterns = [
     # path("login/", login_view, name="login"),
-    path("login/", login_view, name="login"),
-    path("custom_login/", CustomLoginView.as_view(), name="custom_login"),
-    path("logout/", logout_view, name="logout"),
-    path("custom_logout/", CustomLogoutView.as_view(), name="custom_logout"),
+    path("login/", CustomLoginView.as_view(), name="login"),
+    # path("logout/", logout_view, name="logout"),
+    path("logout/", CustomLogoutView.as_view(), name="logout"),
     path("about-me/", AboutMeView.as_view(), name="about_me"),
     path("register/", RegistrationView.as_view(), name="register"),
     path("cookie/set/", set_cookie_view, name="cookie_set"),
