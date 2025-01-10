@@ -1,3 +1,8 @@
+from django.contrib.auth.decorators import (
+    login_required,
+    permission_required,
+    user_passes_test,
+)
 from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
@@ -110,6 +115,7 @@ def set_session_view(request: HttpRequest) -> HttpResponse:
     return HttpResponse("Session set")
 
 
+@login_required
 def get_session_view(request: HttpRequest) -> HttpResponse:
     """Get session"""
 
