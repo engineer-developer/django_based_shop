@@ -1,0 +1,29 @@
+{% extends 'myauth/base.html' %}
+
+{% block title %}
+	Login
+{% endblock %}
+
+
+{% block body %}
+    <form action="" method="post">
+        {% csrf_token %}
+
+        {% if error %}
+            <p style="color: red">
+                {{ error }}
+            </p>
+        {% endif %}
+
+        <p>
+            <label for="username">Username:</label>
+            <input type="text" name="username" id="username" required>
+        </p>
+        <p>
+            <label for="password">Password:</label>
+            <input type="password" name="password" id="password" required>
+        </p>
+
+        <button type="submit">Login</button>
+    </form>
+{% endblock %}
