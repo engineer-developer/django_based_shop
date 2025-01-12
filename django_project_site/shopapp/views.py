@@ -140,7 +140,12 @@ class ProductUpdateView(UserPassesTestMixin, UpdateView):
     """
 
     def test_func(self):
-        return self.request.user.is_superuser
+        product = self.get_object()
+        checking_conditions = (
+            self.request.user.has_perm("shopapp.change_product"),
+            product.created_by == self.request.user,
+        )
+        return self.request.user.is_superuser or all(checking_conditions)
 
     model = Product
     fields = "name", "price", "description", "discount"
