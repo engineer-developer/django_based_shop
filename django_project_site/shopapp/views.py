@@ -133,6 +133,12 @@ class ProductCreateView(PermissionRequiredMixin, CreateView):
 
 
 class ProductUpdateView(UserPassesTestMixin, UpdateView):
+    """Update product.
+
+    The update can be performed by admins or users which created product
+    and have permissions to change product.
+    """
+
     def test_func(self):
         return self.request.user.is_superuser
 
