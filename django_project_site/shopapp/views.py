@@ -93,9 +93,10 @@ class ProductsListView(ListView):
     context_object_name = "products"
 
 
-class ProductCreateView(CreateView):
+class ProductCreateView(PermissionRequiredMixin, CreateView):
     """Create new product."""
 
+    permission_required = "shopapp.add_product"
     model = Product
     fields = "name", "price", "description", "discount"
     success_url = reverse_lazy("shopapp:products_list")
