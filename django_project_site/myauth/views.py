@@ -94,12 +94,17 @@ class CustomLogoutView(LogoutView):
 
 
 def check_is_superuser(user):
+    """Function to check if user is superuser"""
+
     return True if user.is_superuser else False
 
 
 @user_passes_test(test_func=check_is_superuser, login_url="/myauth/not-authorized/")
 def set_cookie_view(request: HttpRequest) -> HttpResponse:
-    """Set cookie"""
+    """Set cookie
+
+    Decorator "user_passes_test" checks that user is superuser.
+    """
 
     response = HttpResponse("Cookie set")
     response.set_cookie(key="fizz", value="buzz", max_age=3600)
@@ -116,7 +121,10 @@ def get_cookie_view(request: HttpRequest) -> HttpResponse:
 
 @permission_required("myauth.view_profile", raise_exception=True)
 def set_session_view(request: HttpRequest) -> HttpResponse:
-    """Set session"""
+    """Set session
+
+    Decorator "permission_required" checks that user have permission to view profile.
+    """
 
     request.session["foobar"] = "spameggs"
     return HttpResponse("Session set")
@@ -124,7 +132,10 @@ def set_session_view(request: HttpRequest) -> HttpResponse:
 
 @login_required
 def get_session_view(request: HttpRequest) -> HttpResponse:
-    """Get session"""
+    """Get session
+
+    Decorator "login_required" checks that user is logged in.
+    """
 
     value = request.session.get("foobar", "default")
     return HttpResponse(f"Session value: {value!r}")
