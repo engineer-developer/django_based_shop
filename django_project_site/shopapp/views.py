@@ -98,7 +98,7 @@ class ProductCreateView(UserPassesTestMixin, CreateView):
         return self.request.user.is_superuser
 
     model = Product
-    fields = "name", "price", "description", "discount"
+    fields = "name", "price", "description", "discount", "created_by"
     success_url = reverse_lazy("shopapp:products_list")
     template_name = "shopapp/product_form.html"
 
