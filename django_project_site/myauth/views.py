@@ -67,7 +67,7 @@ class CustomLoginView(LoginView):
 
     template_name = "myauth/login.html"
     redirect_authenticated_user = True
-    next_page = "/admin/"
+    next_page = reverse_lazy("myauth:about_me")
 
 
 def logout_view(request: HttpRequest) -> HttpResponse:
