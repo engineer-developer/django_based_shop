@@ -93,9 +93,8 @@ class ProductsListView(ListView):
     context_object_name = "products"
 
 
-class ProductCreateView(UserPassesTestMixin, CreateView):
-    def test_func(self):
-        return self.request.user.is_superuser
+class ProductCreateView(CreateView):
+    """Create new product."""
 
     model = Product
     fields = "name", "price", "description", "discount"
@@ -132,7 +131,10 @@ class ProductCreateView(UserPassesTestMixin, CreateView):
 #     return render(request, "shopapp/create-product.html", context)
 
 
-class ProductUpdateView(UpdateView):
+class ProductUpdateView(UserPassesTestMixin, UpdateView):
+    def test_func(self):
+        return self.request.user.is_superuser
+
     model = Product
     fields = "name", "price", "description", "discount"
     template_name_suffix = "_update_form"
