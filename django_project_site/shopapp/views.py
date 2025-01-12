@@ -94,7 +94,11 @@ class ProductsListView(ListView):
 
 
 class ProductCreateView(PermissionRequiredMixin, CreateView):
-    """Create new product."""
+    """Create new product.
+
+    Product can create admins or users which have permission
+    to create new products.
+    """
 
     permission_required = "shopapp.add_product"
     model = Product
@@ -180,7 +184,11 @@ class DeleteProductView(DeleteView):
 
 
 class OrderListView(LoginRequiredMixin, ListView):
-    """Get order list."""
+    """Get orders list.
+
+    Shows orders with at least one product.\n
+    Orders list can get only logged-in users.
+    """
 
     # Get all orders with count of products greater then 0
     queryset = (
@@ -195,7 +203,11 @@ class OrderListView(LoginRequiredMixin, ListView):
 
 
 class OrderDetailsView(PermissionRequiredMixin, DetailView):
-    """Get order details."""
+    """Get order details.
+
+    Order details can get only users which have permission
+    to view order details.
+    """
 
     permission_required = "shopapp.view_order"
     model = Order
