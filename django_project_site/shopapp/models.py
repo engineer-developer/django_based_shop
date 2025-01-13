@@ -12,6 +12,11 @@ class Product(models.Model):
     discount = models.SmallIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     archived = models.BooleanField(default=False)
+    created_by = models.ForeignKey(
+        User,
+        related_name="products",
+        on_delete=models.PROTECT,
+    )
 
     # @property
     # def description_short(self) -> str:
@@ -24,6 +29,9 @@ class Product(models.Model):
 
 
 class Order(models.Model):
+    class Meta:
+        ordering = ["created_at"]
+
     delivery_address = models.TextField(null=True, blank=True)
     promocode = models.CharField(max_length=20, null=False, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)

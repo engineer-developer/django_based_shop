@@ -14,6 +14,11 @@ from django.views.generic import (
     UpdateView,
     DeleteView,
 )
+from django.contrib.auth.mixins import (
+    LoginRequiredMixin,
+    PermissionRequiredMixin,
+    UserPassesTestMixin,
+)
 
 from shopapp.forms import OrderForm, ProductForm, GroupForm
 from shopapp.models import Order, Product
@@ -35,7 +40,7 @@ class ShopIndexView(View):
 
         products = [
             ("laptop", 1999),
-            ("desctop", 2999),
+            ("desktop", 2999),
             ("smartphone", 999),
             ("mouse", 99),
         ]
@@ -88,11 +93,24 @@ class ProductsListView(ListView):
     context_object_name = "products"
 
 
-class ProductCreateView(CreateView):
+class ProductCreateView(PermissionRequiredMixin, CreateView):
+    """Create new product.
+
+    Product can create admins or users which have permission
+    to create new products.
+    """
+
+    permission_required = "shopapp.add_product"
     model = Product
     fields = "name", "price", "description", "discount"
     success_url = reverse_lazy("shopapp:products_list")
     template_name = "shopapp/product_form.html"
+
+    def form_valid(self, form):
+        """If the form is valid, save the associated model."""
+        user = self.request.user
+        form.instance.created_by = user
+        return super().form_valid(form)
 
 
 # def create_product(request: HttpRequest) -> HttpResponse:
@@ -118,7 +136,21 @@ class ProductCreateView(CreateView):
 #     return render(request, "shopapp/create-product.html", context)
 
 
-class ProductUpdateView(UpdateView):
+class ProductUpdateView(UserPassesTestMixin, UpdateView):
+    """Update product.
+
+    The update can be performed by admins or users which created product
+    and have permissions to change product.
+    """
+
+    def test_func(self):
+        product = self.get_object()
+        checking_conditions = (
+            self.request.user.has_perm("shopapp.change_product"),
+            product.created_by == self.request.user,
+        )
+        return self.request.user.is_superuser or all(checking_conditions)
+
     model = Product
     fields = "name", "price", "description", "discount"
     template_name_suffix = "_update_form"
@@ -151,8 +183,12 @@ class DeleteProductView(DeleteView):
     success_url = reverse_lazy("shopapp:products_list")
 
 
-class OrderListView(ListView):
-    """Get order list."""
+class OrderListView(LoginRequiredMixin, ListView):
+    """Get orders list.
+
+    Shows orders with at least one product.\n
+    Orders list can get only logged-in users.
+    """
 
     # Get all orders with count of products greater then 0
     queryset = (
@@ -160,14 +196,20 @@ class OrderListView(ListView):
         .prefetch_related("products")
         .annotate(products_count=Count("products"))
         .filter(products_count__gt=0)
+        .order_by("pk")
     )
     # model = Order
     context_object_name = "orders"
 
 
-class OrderDetailsView(DetailView):
-    """Get order details."""
+class OrderDetailsView(PermissionRequiredMixin, DetailView):
+    """Get order details.
 
+    Order details can get only users which have permission
+    to view order details.
+    """
+
+    permission_required = "shopapp.view_order"
     model = Order
     context_object_name = "order"
 
