@@ -3,11 +3,11 @@ from random import choices
 
 from django.test import TestCase
 from django.urls import reverse
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Permission
 from django.conf import settings
 
 from shopapp.utils import add_two_numbers
-from shopapp.models import Product
+from shopapp.models import Product, Order
 
 
 class AddTwoNumbersTestCase(TestCase):
@@ -182,3 +182,43 @@ class ProductsExportViewTestCase(TestCase):
         ]
         products_data = response.json()
         self.assertEqual(products_data["products"], expected_data)
+
+
+class OrderDetailViewTestCase(TestCase):
+    fixtures = [
+        "products-fixture.json",
+    ]
+
+    @classmethod
+    def setUpClass(cls):
+        cls.user = User.objects.create_user(username="john", password="123")
+        permission = Permission.objects.get(codename="view_order")
+        cls.user.user_permissions.add(permission)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.user.delete()
+
+    def setUp(self):
+        self.client.force_login(self.user)
+        product = Product.objects.filter(pk=1).first()
+        self.order = Order.objects.create(
+            user=self.user,
+            delivery_address="MSK, Lenina str. 58",
+            promocode="SALE200",
+        )
+        self.order.products.add(product)
+        self.order.save()
+
+    def tearDown(self):
+        self.order.delete()
+        self.client.logout()
+
+    def test_order_details(self):
+        response = self.client.get(
+            reverse("shopapp:order_detail", kwargs={"pk": self.order.pk})
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.order.delivery_address)
+        self.assertContains(response, self.order.promocode)
+        self.assertEqual(self.order.pk, response.context["object"].pk)
