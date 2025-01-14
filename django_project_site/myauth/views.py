@@ -4,10 +4,11 @@ from django.contrib.auth.decorators import (
     user_passes_test,
 )
 from django.contrib.auth.forms import UserCreationForm
-from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.views import LoginView, LogoutView
+from django.views import View
 from django.views.generic import TemplateView, CreateView
 from django.urls import reverse, reverse_lazy
 
@@ -145,3 +146,8 @@ def not_authorized_view(request: HttpRequest) -> HttpResponse:
     """Not authorized view"""
 
     return render(request, "myauth/not_authorized.html")
+
+
+class FooBarView(View):
+    def get(self, request) -> JsonResponse:
+        return JsonResponse({"foo": "bar", "spam": "eggs"})

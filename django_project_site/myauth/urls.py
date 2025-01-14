@@ -12,6 +12,7 @@ from myauth.views import (
     AboutMeView,
     RegistrationView,
     not_authorized_view,
+    FooBarView,
 )
 
 
@@ -30,4 +31,5 @@ urlpatterns = [
     path("session/set/", set_session_view, name="session_set"),
     path("session/get/", get_session_view, name="session_get"),
     path("not-authorized/", not_authorized_view, name="not_authorized"),
+    path("foo-bar/", FooBarView.as_view(), name="foo_bar"),
 ]

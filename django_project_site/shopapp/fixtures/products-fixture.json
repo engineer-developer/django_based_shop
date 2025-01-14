@@ -1,0 +1,132 @@
+[
+    {
+        "model": "shopapp.product",
+        "pk": 1,
+        "fields": {
+            "name": "Laptop",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipisc",
+            "price": "1999.00",
+            "discount": 0,
+            "created_at": "2024-12-23T17:43:25.413Z",
+            "archived": false,
+            "created_by": 1
+        }
+    },
+    {
+        "model": "shopapp.product",
+        "pk": 2,
+        "fields": {
+            "name": "Desktop",
+            "description": "it's very smart",
+            "price": "2599.00",
+            "discount": 10,
+            "created_at": "2024-12-23T17:43:25.413Z",
+            "archived": false,
+            "created_by": 1
+        }
+    },
+    {
+        "model": "shopapp.product",
+        "pk": 3,
+        "fields": {
+            "name": "Smartphone",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas placerat purus tortor, feugiat tempor orci pellentesque vitae. Praesent in ipsum vitae dui tincidunt blandit non ut ipsum. Maecenas id pulvinar nunc. Praesent quis magna volutpat mi tincidunt vulputate non non diam. Quisque quis cursus urna. Quisque finibus blandit suscipit. Nullam a tempor massa, ac fermentum eros. Donec libero neque, faucibus vel congue eget, rutrum in felis. Vestibulum ornare diam nec velit tempor, eget sodales ligula accumsan. Sed iaculis ligula lorem, quis malesuada urna aliquet in. Vestibulum tristique lacus eu ultrices vehicula. Phasellus efficitur nulla risus, nec consequat nisi tempus ut. Donec id ipsum magna. In at sodales nibh. Nulla et nisl neque.",
+            "price": "987.00",
+            "discount": 25,
+            "created_at": "2024-12-23T17:43:25.413Z",
+            "archived": false,
+            "created_by": 1
+        }
+    },
+    {
+        "model": "shopapp.product",
+        "pk": 4,
+        "fields": {
+            "name": "Tablet",
+            "description": "Best tablet",
+            "price": "1234.00",
+            "discount": 0,
+            "created_at": "2024-12-29T16:53:58.639Z",
+            "archived": false,
+            "created_by": 1
+        }
+    },
+    {
+        "model": "shopapp.product",
+        "pk": 5,
+        "fields": {
+            "name": "Phone2",
+            "description": "phone2 is better than phone1.\r\nthis is great phone!",
+            "price": "345.00",
+            "discount": 0,
+            "created_at": "2024-12-29T17:02:14.709Z",
+            "archived": false,
+            "created_by": 1
+        }
+    },
+    {
+        "model": "shopapp.product",
+        "pk": 6,
+        "fields": {
+            "name": "Phone3",
+            "description": "phone 3",
+            "price": "6543.00",
+            "discount": 12,
+            "created_at": "2024-12-29T17:36:28.053Z",
+            "archived": true,
+            "created_by": 1
+        }
+    },
+    {
+        "model": "shopapp.product",
+        "pk": 8,
+        "fields": {
+            "name": "Watch_1",
+            "description": "New Watch",
+            "price": "2879.00",
+            "discount": 10,
+            "created_at": "2025-01-07T20:49:01.848Z",
+            "archived": false,
+            "created_by": 1
+        }
+    },
+    {
+        "model": "shopapp.product",
+        "pk": 9,
+        "fields": {
+            "name": "Oculus Quest 3S",
+            "description": "Система виртуальной реальности VR Oculus Quest 3S белого цвета предназначена для синхронизации с ПК через Bluetooth и Wi-Fi. Она имеет 8/128 Гб встроенной памяти для быстродействия и хранения данных. Контроллеры позволяют управлять системой и игровым процессом.",
+            "price": "19900.00",
+            "discount": 25,
+            "created_at": "2025-01-12T14:05:12.116Z",
+            "archived": false,
+            "created_by": 1
+        }
+    },
+    {
+        "model": "shopapp.product",
+        "pk": 10,
+        "fields": {
+            "name": "Socks",
+            "description": "сетевой протокол сеансового уровня модели OSI, который позволяет пересылать пакеты от клиента к серверу через прокси-сервер прозрачно",
+            "price": "99.00",
+            "discount": 0,
+            "created_at": "2025-01-12T14:56:21.654Z",
+            "archived": false,
+            "created_by": 2
+        }
+    },
+    {
+        "model": "shopapp.product",
+        "pk": 13,
+        "fields": {
+            "name": "Шар для бильярда",
+            "description": "Estafit Pool Standart №14 57,2 мм, зеленый/белый",
+            "price": "500.00",
+            "discount": 100,
+            "created_at": "2025-01-12T17:09:20.363Z",
+            "archived": false,
+            "created_by": 4
+        }
+    }
+]
