@@ -162,7 +162,7 @@ class ProductUpdateView(UserPassesTestMixin, UpdateView):
         )
 
 
-class ArchiveProductView(DeleteView):
+class ProductArchiveView(DeleteView):
     """Archive a product."""
 
     model = Product
