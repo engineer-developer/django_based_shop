@@ -277,8 +277,11 @@ class OrderDeleteView(DeleteView):
     success_url = reverse_lazy("shopapp:orders_list")
 
 
-class OrdersExportView(View):
+class OrdersExportView(UserPassesTestMixin, View):
     """Export order data."""
+
+    def test_func(self):
+        return self.request.user.is_staff
 
     def get(self, request: HttpRequest) -> JsonResponse:
         orders = (
