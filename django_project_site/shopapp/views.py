@@ -176,7 +176,7 @@ class ArchiveProductView(DeleteView):
         return HttpResponseRedirect(success_url)
 
 
-class DeleteProductView(DeleteView):
+class ProductDeleteView(DeleteView):
     """Delete a product."""
 
     model = Product
