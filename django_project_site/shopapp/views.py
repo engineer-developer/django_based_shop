@@ -183,6 +183,23 @@ class DeleteProductView(DeleteView):
     success_url = reverse_lazy("shopapp:products_list")
 
 
+class ProductsDataExportView(View):
+    """Export product data."""
+
+    def get(self, request: HttpRequest) -> JsonResponse:
+        products = Product.objects.order_by("pk").all()
+        products_data = [
+            {
+                "pk": product.pk,
+                "name": product.name,
+                "price": product.price,
+                "archived": product.archived,
+            }
+            for product in products
+        ]
+        return JsonResponse({"products": products_data})
+
+
 class OrderListView(LoginRequiredMixin, ListView):
     """Get orders list.
 
@@ -258,20 +275,3 @@ class OrderDeleteView(DeleteView):
 
     model = Order
     success_url = reverse_lazy("shopapp:orders_list")
-
-
-class ProductsDataExportView(View):
-    """Export product data."""
-
-    def get(self, request: HttpRequest) -> JsonResponse:
-        products = Product.objects.order_by("pk").all()
-        products_data = [
-            {
-                "pk": product.pk,
-                "name": product.name,
-                "price": product.price,
-                "archived": product.archived,
-            }
-            for product in products
-        ]
-        return JsonResponse({"products": products_data})
