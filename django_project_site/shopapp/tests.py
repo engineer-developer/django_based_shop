@@ -95,7 +95,7 @@ class ProductListViewTestCase(TestCase):
     def test_products(self):
         response = self.client.get(reverse("shopapp:products_list"))
 
-        # Check what status code of response is "200"
+        # Checking what status code of response is "200"
         self.assertEqual(response.status_code, 200)
 
         # Get all unarchived products from database (stored in given fixture)
@@ -104,7 +104,7 @@ class ProductListViewTestCase(TestCase):
         # Get all products from response context
         products_from_context = response.context["products"]
 
-        # Check what count of both collections is equal
+        # Checking what a count of both collections is equal
         self.assertCountEqual(products_from_db, products_from_context)
 
         # Compare products_from_db with products_from_context in cycle
@@ -120,35 +120,8 @@ class ProductListViewTestCase(TestCase):
             transform=lambda prod_qs: prod_qs.pk,
         )
 
-        # Check what template "shopapp/products-list.html" is used
+        # Checking what a template with name "shopapp/products-list.html" is being used
         self.assertTemplateUsed(response, "shopapp/products-list.html")
-
-
-class OrdersListViewestCase(TestCase):
-    @classmethod
-    def setUpClass(cls):
-        cls.credentials = dict(username="john", password="123")
-        cls.user = User.objects.create_user(**cls.credentials)
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.user.delete()
-
-    def setUp(self):
-        self.client.login(**self.credentials)
-
-    def tearDown(self):
-        self.client.logout()
-
-    def test_orders_view(self):
-        response = self.client.get(reverse("shopapp:orders_list"))
-        self.assertContains(response, "Orders")
-
-    def test_orders_view_not_authenticated(self):
-        self.client.logout()
-        response = self.client.get(reverse("shopapp:orders_list"))
-        self.assertEqual(response.status_code, 302)
-        self.assertIn(str(settings.LOGIN_URL), response.url)
 
 
 class ProductsExportViewTestCase(TestCase):
@@ -184,6 +157,33 @@ class ProductsExportViewTestCase(TestCase):
         self.assertEqual(products_data["products"], expected_data)
 
 
+class OrdersListViewTestCase(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.credentials = dict(username="john", password="123")
+        cls.user = User.objects.create_user(**cls.credentials)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.user.delete()
+
+    def setUp(self):
+        self.client.login(**self.credentials)
+
+    def tearDown(self):
+        self.client.logout()
+
+    def test_orders_view(self):
+        response = self.client.get(reverse("shopapp:orders_list"))
+        self.assertContains(response, "Orders")
+
+    def test_orders_view_not_authenticated(self):
+        self.client.logout()
+        response = self.client.get(reverse("shopapp:orders_list"))
+        self.assertEqual(response.status_code, 302)
+        self.assertIn(str(settings.LOGIN_URL), response.url)
+
+
 class OrderDetailViewTestCase(TestCase):
     fixtures = [
         "products-fixture.json",
@@ -192,8 +192,8 @@ class OrderDetailViewTestCase(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.user = User.objects.create_user(username="john", password="123")
-        permission = Permission.objects.get(codename="view_order")
-        cls.user.user_permissions.add(permission)
+        permission_view_order = Permission.objects.get(codename="view_order")
+        cls.user.user_permissions.add(permission_view_order)
 
     @classmethod
     def tearDownClass(cls):
@@ -218,7 +218,15 @@ class OrderDetailViewTestCase(TestCase):
         response = self.client.get(
             reverse("shopapp:order_detail", kwargs={"pk": self.order.pk})
         )
+
+        # Checking what status code of response is "200"
         self.assertEqual(response.status_code, 200)
+
+        # Checking what response is contains delivery_address
         self.assertContains(response, self.order.delivery_address)
+
+        # Checking what response is contains promocode
         self.assertContains(response, self.order.promocode)
+
+        # Checking what a created order and order from response have the same pk
         self.assertEqual(self.order.pk, response.context["object"].pk)
