@@ -79,17 +79,21 @@ class ProductDetailsViewTestCase(TestCase):
 
 class ProductListViewTestCase(TestCase):
     fixtures = [
+        "groups-fixture.json",
+        "users-fixture.json",
         "products-fixture.json",
     ]
 
     @classmethod
     def setUpClass(cls):
+        super().setUpClass()
         for count in range(4):
             username = "".join(choices(ascii_letters, k=6))
             User.objects.create_user(username=username, password="123")
 
     @classmethod
     def tearDownClass(cls):
+        super().tearDownClass()
         User.objects.all().delete()
 
     def test_products(self):
