@@ -275,3 +275,30 @@ class OrderDeleteView(DeleteView):
 
     model = Order
     success_url = reverse_lazy("shopapp:orders_list")
+
+
+class OrdersExportView(View):
+    """Export order data."""
+
+    def get(self, request: HttpRequest) -> JsonResponse:
+        orders = (
+            Order.objects.select_related("user")
+            .prefetch_related("products")
+            .annotate(products_count=Count("products"))
+            .filter(products_count__gt=0)
+            .order_by("pk")
+            .all()
+        )
+        orders_data = [
+            {
+                "id": order.pk,
+                "delivery_address": order.delivery_address,
+                "promocode": order.promocode,
+                "user_id": order.user.pk,
+                "products_id": [
+                    product.pk for product in order.products.order_by("pk").all()
+                ],
+            }
+            for order in orders
+        ]
+        return JsonResponse({"orders": orders_data})
