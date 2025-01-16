@@ -1,6 +1,7 @@
 from string import ascii_letters
 from random import choices
 
+from django.db.models import Count
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth.models import User, Permission
@@ -47,7 +48,7 @@ class ProductDetailsViewTestCase(TestCase):
             "john", email="john@mail.com", password="123"
         )
         cls.product = Product.objects.create(
-            name="Product Name",
+            name="Best new product",
             price=123.45,
             description="The best mouse",
             created_by=cls.user,
@@ -74,6 +75,7 @@ class ProductDetailsViewTestCase(TestCase):
             )
         )
         print(self.product.name)
+        print(f"product: {response.context["product"]}")
         self.assertContains(response, self.product.name)
 
 
@@ -99,7 +101,7 @@ class ProductListViewTestCase(TestCase):
     def test_products(self):
         response = self.client.get(reverse("shopapp:products_list"))
 
-        # Checking what status code of response is "200"
+        # Checking what a status code of response is "200"
         self.assertEqual(response.status_code, 200)
 
         # Get all unarchived products from database (stored in given fixture)
@@ -166,17 +168,27 @@ class ProductsExportViewTestCase(TestCase):
 
 
 class OrdersListViewTestCase(TestCase):
+    fixtures = [
+        "full_db_dump.json",
+    ]
+
     @classmethod
     def setUpClass(cls):
+        super().setUpClass()
         cls.credentials = dict(username="john", password="123")
         cls.user = User.objects.create_user(**cls.credentials)
+        cls.user.user_permissions.add(
+            Permission.objects.get(codename="view_order"),
+        )
+        cls.user.save()
 
     @classmethod
     def tearDownClass(cls):
+        super().tearDownClass()
         cls.user.delete()
 
     def setUp(self):
-        self.client.login(**self.credentials)
+        self.client.force_login(self.user)
 
     def tearDown(self):
         self.client.logout()
@@ -184,6 +196,7 @@ class OrdersListViewTestCase(TestCase):
     def test_orders_view(self):
         response = self.client.get(reverse("shopapp:orders_list"))
         self.assertContains(response, "Orders")
+        self.assertGreater(len(response.context["orders"]), 0)
 
     def test_orders_view_not_authenticated(self):
         self.client.logout()
@@ -209,7 +222,7 @@ class OrderDetailViewTestCase(TestCase):
 
     def setUp(self):
         self.client.force_login(self.user)
-        product = Product.objects.filter(pk=1).first()
+        product = Product.objects.first()
         self.order = Order.objects.create(
             user=self.user,
             delivery_address="MSK, Lenina str. 58",
@@ -227,7 +240,7 @@ class OrderDetailViewTestCase(TestCase):
             reverse("shopapp:order_detail", kwargs={"pk": self.order.pk})
         )
 
-        # Checking what status code of response is "200"
+        # Checking what a status code of response is "200"
         self.assertEqual(response.status_code, 200)
 
         # Checking what response is contains delivery_address
@@ -238,3 +251,65 @@ class OrderDetailViewTestCase(TestCase):
 
         # Checking what a created order and order from response have the same pk
         self.assertEqual(self.order.pk, response.context["object"].pk)
+
+
+class OrdersExportViewTestCase(TestCase):
+    fixtures = [
+        "groups-fixture.json",
+        "users-fixture.json",
+        "products-fixture.json",
+        "orders-fixture.json",
+    ]
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.user = User.objects.create_user(username="john", password="123")
+        cls.user.is_staff = True
+        cls.user.save()
+
+    @classmethod
+    def tearDownClass(cls):
+        super().tearDownClass()
+        cls.user.delete()
+
+    def setUp(self):
+        self.client.force_login(self.user)
+
+    def tearDown(self):
+        self.client.logout()
+
+    def test_orders_export(self):
+        response = self.client.get(reverse("shopapp:orders_export"))
+
+        # Checking what a status code of response is "200"
+        self.assertEqual(response.status_code, 200)
+
+        # Get orders data from response
+        orders_data = response.json()
+
+        # Get orders from database
+        orders = (
+            Order.objects.select_related("user")
+            .prefetch_related("products")
+            .annotate(products_count=Count("products"))
+            .filter(products_count__gt=0)
+            .order_by("pk")
+        )
+
+        # Prepare expected data in the specified format
+        expected_data = [
+            {
+                "id": order.pk,
+                "delivery_address": order.delivery_address,
+                "promocode": order.promocode,
+                "user_id": order.user.pk,
+                "products_id": [
+                    product.pk for product in order.products.order_by("pk").all()
+                ],
+            }
+            for order in orders
+        ]
+
+        # Checking what the received orders data is equal expected_data
+        self.assertEqual(orders_data["orders"], expected_data)
