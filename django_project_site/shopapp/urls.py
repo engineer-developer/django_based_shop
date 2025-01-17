@@ -15,11 +15,13 @@ from shopapp.views import (
     OrderDetailsView,
     ProductCreateView,
     ProductUpdateView,
-    DeleteProductView,
-    ArchiveProductView,
+    ProductDeleteView,
+    ProductArchiveView,
     OrderCreateView,
     OrderUpdateView,
     OrderDeleteView,
+    ProductsDataExportView,
+    OrdersExportView,
 )
 
 app_name = "shopapp"
@@ -30,6 +32,7 @@ urlpatterns = [
     path("users/", users_list, name="users_list"),
     path("groups/", GroupsListView.as_view(), name="groups_list"),
     path("products/", ProductsListView.as_view(), name="products_list"),
+    path("products/export/", ProductsDataExportView.as_view(), name="products_export"),
     path("products/create/", ProductCreateView.as_view(), name="product_create"),
     path("products/<int:pk>/", ProductDetailsView.as_view(), name="product_details"),
     path(
@@ -37,13 +40,14 @@ urlpatterns = [
     ),
     path(
         "products/<int:pk>/archive/",
-        ArchiveProductView.as_view(),
+        ProductArchiveView.as_view(),
         name="product_archive",
     ),
     path(
-        "products/<int:pk>/delete/", DeleteProductView.as_view(), name="product_delete"
+        "products/<int:pk>/delete/", ProductDeleteView.as_view(), name="product_delete"
     ),
     path("orders/", OrderListView.as_view(), name="orders_list"),
+    path("orders/export/", OrdersExportView.as_view(), name="orders_export"),
     path("orders/create", OrderCreateView.as_view(), name="order_create"),
     # path("orders/create", create_order, name="create_order"),
     path("orders/<int:pk>/", OrderDetailsView.as_view(), name="order_detail"),
