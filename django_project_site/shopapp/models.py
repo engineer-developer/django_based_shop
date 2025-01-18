@@ -2,6 +2,13 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
+def product_preview_directory_path(instance: "Product", filename: str) -> str:
+    return "products/product_{pk}/preview/{filename}".format(
+        pk=instance.pk,
+        filename=filename,
+    )
+
+
 class Product(models.Model):
     class Meta:
         ordering = ["name"]
@@ -16,6 +23,11 @@ class Product(models.Model):
         User,
         related_name="products",
         on_delete=models.PROTECT,
+    )
+    preview = models.ImageField(
+        null=True,
+        blank=True,
+        upload_to=product_preview_directory_path,
     )
 
     # @property
