@@ -41,7 +41,7 @@ class ProductAdmin(admin.ModelAdmin, ExportAsCSVMixin):
     list_display = "pk", "name", "description_short", "price", "discount", "archived"
     list_display_links = "pk", "name"
     # readonly_fields = ("price", "discount")
-    ordering = ("-name", "pk")
+    ordering = ("name", "pk")
     empty_value_display = "---"
     # list_per_page = 2
     search_fields = "name", "description", "price"
