@@ -17,6 +17,7 @@ from myauth.views import (
     ProfileCreateView,
     UsersListView,
     UserDetailsView,
+    AboutMeAvatarUpdateView,
 )
 
 
@@ -29,6 +30,11 @@ urlpatterns = [
     # path("logout/", logout_view, name="logout"),
     path("logout/", CustomLogoutView.as_view(), name="logout"),
     path("about-me/", AboutMeView.as_view(), name="about_me"),
+    path(
+        "about-me/profile/<int:pk>/update/",
+        AboutMeAvatarUpdateView.as_view(),
+        name="about_me_avatar_update",
+    ),
     path("register/", RegistrationView.as_view(), name="register"),
     path("cookie/set/", set_cookie_view, name="cookie_set"),
     path("cookie/get/", get_cookie_view, name="cookie_get"),
