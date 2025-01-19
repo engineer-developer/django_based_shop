@@ -28,9 +28,12 @@
             {% endif %}
         {% endif %}
     </div>
-    <div>
-        <a href="{% url "myauth:profile_update" pk=user.profile.pk %}">Update profile</a>
-    </div>
+    {% if current_user.is_staff or user == current_user %}
+    	<div>
+            <a href="{% url "myauth:profile_update" pk=user.profile.pk %}">Update profile</a>
+        </div>
+    {% endif %}
+
     <div>
         <br>
         <a href="{% url "myauth:users_list" %}">Back to users list</a>
