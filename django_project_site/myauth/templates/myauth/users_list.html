@@ -1,0 +1,68 @@
+{% extends 'myauth/base.html' %}
+
+{% block title %}
+	Users list
+{% endblock %}
+
+
+{% block body %}
+    <style>
+        .users-block {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .user-block {
+            width: 200px;
+            height: 200px;
+            background-color: #82f2e7;
+            border: 1px solid black;
+            border-radius: 10px;
+            margin: 10px 10px;
+            padding: 5px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .username-block {
+            margin: 10px;
+        }
+        .user-block img {
+            width: 100%;
+            height: 70%;
+            object-fit: contain;
+        }
+    </style>
+
+
+	<h1>Users:</h1>
+    <div>
+        {% if users %}
+            <div class="users-block">
+                {% for user in users %}
+                    <div class="user-block">
+                        {% if user.profile.avatar %}
+                            <img src="{{ user.profile.avatar.url }}" alt="user.profile.name">
+                        {% endif %}
+                        <a href="{% url "myauth:user_details" pk=user.pk %}">
+                            <div class="username-block">
+                                User: {% firstof user.username user.first_name user.last_name %}
+                            </div>
+                        </a>
+
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <h3>No users yet</h3>
+        {% endif %}
+    </div>
+
+    <div>
+        <a href="{% url "myauth:about_me" %}">About me</a>
+    </div>
+
+{% endblock %}

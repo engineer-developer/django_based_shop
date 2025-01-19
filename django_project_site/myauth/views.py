@@ -181,3 +181,10 @@ class ProfileUpdateView(UpdateView):
 
 class UsersListView(ListView):
     pass
+    template_name = "myauth/users_list.html"
+    context_object_name = "users"
+
+    def get_queryset(self):
+        return User.objects.select_related("profile")
+
+

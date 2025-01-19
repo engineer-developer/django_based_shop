@@ -15,6 +15,7 @@ from myauth.views import (
     FooBarView,
     ProfileUpdateView,
     ProfileCreateView,
+    UsersListView,
 )
 
 
@@ -38,4 +39,5 @@ urlpatterns = [
     path(
         "profile/<int:pk>/update/", ProfileUpdateView.as_view(), name="profile_update"
     ),
+    path("users/", UsersListView.as_view(), name="users_list"),
 ]
