@@ -204,7 +204,8 @@ class ProfileUpdateView(UserPassesTestMixin, UpdateView):
 
     def get_success_url(self):
         return reverse(
-            "myauth:users_list",
+            "myauth:user_details",
+            kwargs={"pk": self.object.user.pk},
         )
 
 
