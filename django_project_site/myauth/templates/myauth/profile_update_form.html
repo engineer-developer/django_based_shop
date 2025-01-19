@@ -7,11 +7,23 @@
 
 
 {% block body %}
+    <style>
+        img {
+            width: 100px;
+            height: auto;
+        }
+    </style>
     <h1>Update profile of user <em>'{{ profile.user }}'</em></h1>
+    <div>
+        {% if profile.avatar %}
+            <img src="{{ profile.avatar.url }}" alt="profile.avatar.name">
+        {% endif %}
+    </div>
     <div>
         <form action="" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form.as_p }}
+            <br>
             <button type="submit">Update profile</button>
         </form>
     </div>
