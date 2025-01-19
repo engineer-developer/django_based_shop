@@ -10,3 +10,11 @@ class ProfileForm(forms.ModelForm):
             "bio",
             "avatar",
         ]
+
+
+class AboutMeAvatarUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = [
+            "avatar",
+        ]
