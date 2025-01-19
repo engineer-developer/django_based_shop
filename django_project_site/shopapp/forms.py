@@ -44,12 +44,9 @@ class MultipleImageField(forms.ImageField):
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = [
-            "name",
-            "price",
-            "description",
-            "discount",
-        ]
+        fields = "name", "price", "description", "discount", "preview"
+
+    images = MultipleImageField()
 
 
 class OrderForm(forms.ModelForm):
