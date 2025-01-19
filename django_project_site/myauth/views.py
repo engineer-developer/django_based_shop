@@ -3,13 +3,21 @@ from django.contrib.auth.decorators import (
     permission_required,
     user_passes_test,
 )
+from django.contrib.auth.mixins import UserPassesTestMixin
+from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.views import LoginView, LogoutView
 from django.views import View
-from django.views.generic import TemplateView, CreateView, UpdateView, ListView
+from django.views.generic import (
+    TemplateView,
+    CreateView,
+    UpdateView,
+    ListView,
+    DetailView,
+)
 from django.urls import reverse, reverse_lazy
 
 from .models import Profile
@@ -167,7 +175,13 @@ class ProfileCreateView(CreateView):
         return super().form_valid(form)
 
 
-class ProfileUpdateView(UpdateView):
+class ProfileUpdateView(UserPassesTestMixin, UpdateView):
+    def test_func(self):
+        profile = self.get_object()
+        checking_conditions = (self.request.user.pk == profile.user.pk,)
+        # return self.request.user.is_superuser or all(checking_conditions)
+        return True
+
     model = Profile
     form_class = ProfileForm
     template_name_suffix = "_update_form"
@@ -175,7 +189,7 @@ class ProfileUpdateView(UpdateView):
 
     def get_success_url(self):
         return reverse(
-            "myauth:about_me",
+            "myauth:users_list",
         )
 
 
