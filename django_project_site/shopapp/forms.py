@@ -21,6 +21,10 @@ from shopapp.models import Product, Order
 #     )
 
 
+class MultipleClearableFileInput(forms.ClearableFileInput):
+    allow_multiple_selected = True
+
+
 # Implemented forms.ModelForm
 class ProductForm(forms.ModelForm):
     class Meta:
