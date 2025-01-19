@@ -9,12 +9,12 @@
 	<h1>User info</h1>
     {% if user.is_authenticated %}
     	<h2>Detail</h2>
-        <p>Username: {{ user.username }}</p>
-        <p>First name: {{ user.first_name }}</p>
-        <p>Last name: {{ user.last_name }}</p>
-        <p>Email: {{ user.email }}</p>
-        <p>Bio: {{ user.profile.bio }}</p>
-        <p>Agreement accepted: {{ user.profile.agreement_accepted }}</p>
+        <div>Username: {% firstof user.username "No username" %}</div>
+        <div>First name: {% firstof user.first_name "No first name" %}</div>
+        <div>Last name: {% firstof user.last_name "No last name" %}</div>
+        <div>Email: {% firstof user.email "No email" %}</div>
+        <div>Bio: {{ user.profile.bio }}</div>
+        <div>Agreement accepted: {{ user.profile.agreement_accepted }}</div>
 
         <div>
             {% if user.profile.avatar %}
