@@ -11,6 +11,8 @@ class ProfileForm(forms.ModelForm):
             "avatar",
         ]
 
+    email = forms.EmailField()
+
 
 class AboutMeAvatarUpdateForm(forms.ModelForm):
     class Meta:
