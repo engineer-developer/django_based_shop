@@ -229,3 +229,8 @@ class UserDetailsView(DetailView):
 
     def get_queryset(self):
         return User.objects.select_related("profile")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["current_user"] = self.request.user
+        return context
