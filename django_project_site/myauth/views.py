@@ -151,3 +151,17 @@ def not_authorized_view(request: HttpRequest) -> HttpResponse:
 class FooBarView(View):
     def get(self, request) -> JsonResponse:
         return JsonResponse({"foo": "bar", "spam": "eggs"})
+
+
+class ProfileCreateView(CreateView):
+    model = Profile
+    fields = "bio", "agreement_accepted", "avatar"
+    template_name = "myauth/profile_form.html"
+    success_url = reverse_lazy("myauth:about_me")
+
+    def form_valid(self, form):
+        """If the form is valid, save the associated model."""
+        user = self.request.user
+        form.instance.user = user
+        return super().form_valid(form)
+
