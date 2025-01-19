@@ -26,6 +26,7 @@
 
         <div>
             {% if user.profile %}
+                <br>
                 <a href="{% url "myauth:profile_update" pk=user.profile.pk%}">Update profile</a>
             {% else %}
                 <hr>
@@ -37,4 +38,8 @@
     {% else %}
         <h2>User is anonymous</h2>
     {% endif %}
+    <div>
+        <br>
+        <a href="{% url "myauth:users_list" %}">Back to users list</a>
+    </div>
 {% endblock %}
