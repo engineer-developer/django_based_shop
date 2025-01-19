@@ -207,6 +207,13 @@ class ProfileUpdateView(UserPassesTestMixin, UpdateView):
             kwargs={"pk": self.object.user.pk},
         )
 
+    def form_valid(self, form):
+        email = form.cleaned_data.get("email")
+        user = form.instance.user
+        user.email = email
+        user.save()
+        return super().form_valid(form)
+
 
 class UsersListView(ListView):
     template_name = "myauth/users_list.html"
