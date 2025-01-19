@@ -21,11 +21,26 @@ from django.views.generic import (
 from django.urls import reverse, reverse_lazy
 
 from .models import Profile
-from .forms import ProfileForm
+from .forms import ProfileForm, AboutMeAvatarUpdateForm
 
 
 class AboutMeView(TemplateView):
     template_name = "myauth/about-me.html"
+
+
+class AboutMeAvatarUpdateView(UpdateView):
+    template_name = "myauth/about-avatar-update.html"
+    model = Profile
+    form_class = AboutMeAvatarUpdateForm
+    success_url = reverse_lazy("myauth:about_me")
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        image = form.files.get("avatar")
+        profile = form.instance
+        profile.avatar = image
+        profile.save()
+        return response
 
 
 class RegistrationView(CreateView):
