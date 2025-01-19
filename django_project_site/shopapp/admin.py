@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.db.models import QuerySet
 from django.http import HttpRequest
 
-from shopapp.models import Product, Order
+from shopapp.models import Product, Order, ProductImage
 from shopapp.admin_mixins import ExportAsCSVMixin
 
 
@@ -26,6 +26,12 @@ def mark_unarchived(
 
 class OrderInline(admin.TabularInline):
     model = Product.orders.through
+    extra = 1
+
+
+class ProductInline(admin.StackedInline):
+    model = ProductImage
+    extra = 1
 
 
 @admin.register(Product)
@@ -37,6 +43,7 @@ class ProductAdmin(admin.ModelAdmin, ExportAsCSVMixin):
     ]
     inlines = [
         OrderInline,
+        ProductInline,
     ]
     list_display = "pk", "name", "description_short", "price", "discount", "archived"
     list_display_links = "pk", "name"
@@ -60,6 +67,13 @@ class ProductAdmin(admin.ModelAdmin, ExportAsCSVMixin):
             },
         ),
         (
+            "Images",
+            {
+                "fields": ("preview",),
+                "classes": ("wide", "collapse"),
+            },
+        ),
+        (
             "Extra options",
             {
                 "fields": ("archived",),
@@ -78,15 +92,14 @@ class ProductAdmin(admin.ModelAdmin, ExportAsCSVMixin):
 # admin.site.register(Product, ProductAdmin)
 
 
-# class ProductInline(admin.TabularInline):
-class ProductInline(admin.StackedInline):
+class OrderProductsInline(admin.StackedInline):
     model = Order.products.through
 
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     inlines = [
-        ProductInline,
+        OrderProductsInline,
     ]
     list_display = "delivery_address", "promocode", "created_at", "user_verbose"
 
