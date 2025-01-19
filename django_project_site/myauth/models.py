@@ -3,8 +3,8 @@ from django.db import models
 
 
 def avatar_image_directory_path(instance: "Profile", filename: str) -> str:
-    return "profiles/profile_{pk}/avatar/{filename}".format(
-        pk=instance.pk,
+    return "users/user_{pk}/avatar/{filename}".format(
+        pk=instance.user.pk,
         filename=filename,
     )
 
