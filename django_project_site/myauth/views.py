@@ -194,8 +194,7 @@ class ProfileUpdateView(UserPassesTestMixin, UpdateView):
     def test_func(self):
         profile = self.get_object()
         checking_conditions = (self.request.user.pk == profile.user.pk,)
-        # return self.request.user.is_superuser or all(checking_conditions)
-        return True
+        return self.request.user.is_staff or all(checking_conditions)
 
     model = Profile
     form_class = ProfileForm
