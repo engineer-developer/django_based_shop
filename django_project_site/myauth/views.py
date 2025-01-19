@@ -180,7 +180,6 @@ class ProfileUpdateView(UpdateView):
 
 
 class UsersListView(ListView):
-    pass
     template_name = "myauth/users_list.html"
     context_object_name = "users"
 
@@ -188,3 +187,9 @@ class UsersListView(ListView):
         return User.objects.select_related("profile")
 
 
+class UserDetailsView(DetailView):
+    template_name = "myauth/user_details.html"
+    context_object_name = "user"
+
+    def get_queryset(self):
+        return User.objects.select_related("profile")
