@@ -18,8 +18,8 @@
 
     <div>
         <hr>
-        <a href="{% url 'myauth:about_me' %}">
-            Back to 'About me'
+        <a href="{% url 'myauth:user_details' pk=profile.user.pk %}">
+            Back to user details
         </a>
     </div>
 
