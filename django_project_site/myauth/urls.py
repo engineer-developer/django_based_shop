@@ -13,6 +13,7 @@ from myauth.views import (
     RegistrationView,
     not_authorized_view,
     FooBarView,
+    ProfileUpdateView,
     ProfileCreateView,
 )
 
@@ -34,4 +35,7 @@ urlpatterns = [
     path("not-authorized/", not_authorized_view, name="not_authorized"),
     path("foo-bar/", FooBarView.as_view(), name="foo_bar"),
     path("profile/create/", ProfileCreateView.as_view(), name="profile_create"),
+    path(
+        "profile/<int:pk>/update/", ProfileUpdateView.as_view(), name="profile_update"
+    ),
 ]

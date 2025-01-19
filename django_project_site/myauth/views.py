@@ -9,10 +9,11 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.views import LoginView, LogoutView
 from django.views import View
-from django.views.generic import TemplateView, CreateView
+from django.views.generic import TemplateView, CreateView, UpdateView, ListView
 from django.urls import reverse, reverse_lazy
 
 from .models import Profile
+from .forms import ProfileForm
 
 
 class AboutMeView(TemplateView):
@@ -165,3 +166,18 @@ class ProfileCreateView(CreateView):
         form.instance.user = user
         return super().form_valid(form)
 
+
+class ProfileUpdateView(UpdateView):
+    model = Profile
+    form_class = ProfileForm
+    template_name_suffix = "_update_form"
+    context_object_name = "profile"
+
+    def get_success_url(self):
+        return reverse(
+            "myauth:about_me",
+        )
+
+
+class UsersListView(ListView):
+    pass

@@ -15,6 +15,25 @@
         <p>Email: {{ user.email }}</p>
         <p>Bio: {{ user.profile.bio }}</p>
         <p>Agreement accepted: {{ user.profile.agreement_accepted }}</p>
+
+        <div>
+            {% if user.profile.avatar %}
+                <img src="{{ user.profile.avatar.url }}" alt="user.profile.avatar.name">
+            {% else %}
+                <p>No avatar upload yet</p>
+            {% endif %}
+        </div>
+
+        <div>
+            {% if user.profile %}
+                <a href="{% url "myauth:profile_update" pk=user.profile.pk%}">Update profile</a>
+            {% else %}
+                <hr>
+                <p>User {{ user }} have not profile.</p>
+                <a href="{% url "myauth:profile_create" %}">Create profile</a>
+            {% endif %}
+        </div>
+
     {% else %}
         <h2>User is anonymous</h2>
     {% endif %}
