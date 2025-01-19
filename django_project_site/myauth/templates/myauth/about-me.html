@@ -27,7 +27,7 @@
         <div>
             {% if user.profile %}
                 {% if user.profile.avatar %}
-                	<a href="{% url "myauth:about_me_avatar_update" pk=user.profile.pk %}">Update avatar</a>
+                	<a href="{% url "myauth:about_me_avatar_update" pk=user.profile.pk %}">Change avatar</a>
                 {% endif %}
             {% else %}
                 <hr>
