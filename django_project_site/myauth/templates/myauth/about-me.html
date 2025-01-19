@@ -26,8 +26,9 @@
 
         <div>
             {% if user.profile %}
-                <br>
-                <a href="{% url "myauth:profile_update" pk=user.profile.pk%}">Update profile</a>
+                {% if user.profile.avatar %}
+                	<a href="{% url "myauth:about_me_avatar_update" pk=user.profile.pk %}">Update avatar</a>
+                {% endif %}
             {% else %}
                 <hr>
                 <p>User {{ user }} have not profile.</p>
