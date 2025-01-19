@@ -11,7 +11,12 @@ class ProfileForm(forms.ModelForm):
             "avatar",
         ]
 
-    email = forms.EmailField()
+    email = forms.EmailField(required=False)
+
+    def __init__(self, *args, **kwargs):
+        super(ProfileForm, self).__init__(*args, **kwargs)
+
+        self.fields["email"].initial = self.instance.user.email
 
 
 class AboutMeAvatarUpdateForm(forms.ModelForm):
