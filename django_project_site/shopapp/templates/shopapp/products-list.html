@@ -1,8 +1,9 @@
 {% extends "shopapp/base.html" %}
 
+{% load i18n %}
 
 {% block title %}
-    Products list
+    {% translate 'Products list' %}
 {% endblock %}
 
 
@@ -40,16 +41,17 @@
     </style>
 
     <div >
-        <h1>Products:</h1>
+        <h1>{% translate 'Products' %}:</h1>
 
         {% if products %}
             <div class="products-block">
                 {% for product in products %}
                     <div class="product-block">
                         <p><a href="{% url 'shopapp:product_details' pk=product.pk %}"
-                        >Name: {{ product.name }}</a></p>
-                        <p>Price: {{ product.price }}</p>
-                        <p>Discount: {% firstof product.discount "no discount" %} </p>
+                        >{% translate 'Name' context "product name" %}: {{ product.name }}</a></p>
+                        <p>{% translate 'Price' %}: {{ product.price }}</p>
+                        {% translate 'no discount' as no_discount %}
+                        <p>{% translate 'Discount' %}: {% firstof product.discount no_discount %} </p>
 
                         {% if product.preview %}
                             <img src="{{ product.preview.url }}" alt="product.preview.name">
@@ -59,12 +61,13 @@
                 {% endfor %}
             </div>
         {% else %}
-            <h3>No products yet</h3>
+            <h3>{% translate 'No products yet' %}</h3>
         {% endif %}</div>
 
     <div>
         {% if perms.shopapp.add_product %}
-        	<a href="{% url 'shopapp:product_create' %}">Create a new product</a>
+        	<a href="{% url 'shopapp:product_create' %}"
+            >{% translate 'Create a new product' %}</a>
         {% endif %}
     </div>
 
