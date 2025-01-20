@@ -18,6 +18,7 @@ from myauth.views import (
     UsersListView,
     UserDetailsView,
     AboutMeAvatarUpdateView,
+    HelloView,
 )
 
 
@@ -36,6 +37,7 @@ urlpatterns = [
         name="about_me_avatar_update",
     ),
     path("register/", RegistrationView.as_view(), name="register"),
+    path("hello/", HelloView.as_view(), name="hello"),
     path("cookie/set/", set_cookie_view, name="cookie_set"),
     path("cookie/get/", get_cookie_view, name="cookie_get"),
     path("session/set/", set_session_view, name="session_set"),
