@@ -21,7 +21,7 @@ from django.contrib.auth.mixins import (
 )
 
 from shopapp.forms import OrderForm, ProductForm, GroupForm
-from shopapp.models import Order, Product
+from shopapp.models import Order, Product, ProductImage
 
 
 def show_greetings(request: HttpRequest) -> HttpResponse:
@@ -80,7 +80,8 @@ class ProductDetailsView(DetailView):
     """Get product details."""
 
     template_name = "shopapp/product-details.html"
-    model = Product
+    # model = Product
+    queryset = Product.objects.prefetch_related("images")
     context_object_name = "product"
 
 
@@ -102,7 +103,7 @@ class ProductCreateView(CreateView):
 
     permission_required = "shopapp.add_product"
     model = Product
-    fields = "name", "price", "description", "discount"
+    fields = "name", "price", "description", "discount", "preview"
     success_url = reverse_lazy("shopapp:products_list")
     template_name = "shopapp/product_form.html"
 
@@ -152,14 +153,25 @@ class ProductUpdateView(UserPassesTestMixin, UpdateView):
         return self.request.user.is_superuser or all(checking_conditions)
 
     model = Product
-    fields = "name", "price", "description", "discount"
+    # fields = "name", "price", "description", "discount", "preview"
     template_name_suffix = "_update_form"
+    form_class = ProductForm
 
     def get_success_url(self):
         return reverse(
             "shopapp:product_details",
             kwargs={"pk": self.object.pk},
         )
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        images = form.files.getlist("images")
+        for image in images:
+            ProductImage.objects.create(
+                product=self.object,
+                image=image,
+            )
+        return response
 
 
 class ProductArchiveView(DeleteView):

@@ -9,33 +9,52 @@
 {% block main %}
     <style>
     .products-block {
-        text-align: center;
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        grid-row-gap: 10px;
     }
     .product-block {
+        width: 180px;
+        height: 190px;
         border: 2px black solid;
         border-radius: 5px;
         background-color: #cbf0ff;
-        margin: 2px;
-        padding: 2px;
-        display: inline-block;
+        margin: 2px auto;
+        padding: 5px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
     }
     .product-block p {
-        margin: 0 1px;
+        margin: 1px auto;
+        text-align: center;
+
+    }
+    .product-block img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
     }
 
     </style>
 
-    <div class="products-block">
+    <div >
         <h1>Products:</h1>
 
         {% if products %}
-            <div>
+            <div class="products-block">
                 {% for product in products %}
                     <div class="product-block">
-                        <p><a href="{% url 'shopapp:product_details' pk=product.pk %}">
-                            Name: {{ product.name }}</a></p>
+                        <p><a href="{% url 'shopapp:product_details' pk=product.pk %}"
+                        >Name: {{ product.name }}</a></p>
                         <p>Price: {{ product.price }}</p>
                         <p>Discount: {% firstof product.discount "no discount" %} </p>
+
+                        {% if product.preview %}
+                            <img src="{{ product.preview.url }}" alt="product.preview.name">
+                        {% endif %}
+
                     </div>
                 {% endfor %}
             </div>

@@ -13,6 +13,11 @@ from myauth.views import (
     RegistrationView,
     not_authorized_view,
     FooBarView,
+    ProfileUpdateView,
+    ProfileCreateView,
+    UsersListView,
+    UserDetailsView,
+    AboutMeAvatarUpdateView,
 )
 
 
@@ -25,6 +30,11 @@ urlpatterns = [
     # path("logout/", logout_view, name="logout"),
     path("logout/", CustomLogoutView.as_view(), name="logout"),
     path("about-me/", AboutMeView.as_view(), name="about_me"),
+    path(
+        "about-me/profile/<int:pk>/update/",
+        AboutMeAvatarUpdateView.as_view(),
+        name="about_me_avatar_update",
+    ),
     path("register/", RegistrationView.as_view(), name="register"),
     path("cookie/set/", set_cookie_view, name="cookie_set"),
     path("cookie/get/", get_cookie_view, name="cookie_get"),
@@ -32,4 +42,10 @@ urlpatterns = [
     path("session/get/", get_session_view, name="session_get"),
     path("not-authorized/", not_authorized_view, name="not_authorized"),
     path("foo-bar/", FooBarView.as_view(), name="foo_bar"),
+    path("profile/create/", ProfileCreateView.as_view(), name="profile_create"),
+    path(
+        "profile/<int:pk>/update/", ProfileUpdateView.as_view(), name="profile_update"
+    ),
+    path("users/", UsersListView.as_view(), name="users_list"),
+    path("users/<int:pk>/", UserDetailsView.as_view(), name="user_details"),
 ]

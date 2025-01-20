@@ -1,0 +1,41 @@
+{% extends 'myauth/base.html' %}
+
+{% block title %}
+	User details
+{% endblock %}
+
+
+{% block body %}
+	<h1>User details</h1>
+    <div>
+        <div>Username: {% firstof user.username "No username" %}</div>
+        <div>First name: {% firstof user.first_name "No first name" %}</div>
+        <div>Last name: {% firstof user.last_name "No last name" %}</div>
+        <div>Email: {% firstof user.email "No email" %}</div>
+        <div>is_staff: {{ user.is_staff }}</div>
+        <div>is_active: {{ user.is_active }}</div>
+        <div>is_superuser: {{ user.is_superuser }}</div>
+
+        {% if user.profile %}
+            <br>
+            <h3>Profile</h3>
+            <div>User bio: {{ user.profile.bio }}</div>
+            <div>Agreement accepted: {{ user.profile.agreement_accepted }}</div>
+            {% if user.profile.avatar %}
+                <img src="{{ user.profile.avatar.url }}" alt="user.profile.avatar.name">
+            {% else %}
+                <div><br>No avatar upload yet</div>
+            {% endif %}
+        {% endif %}
+    </div>
+    {% if current_user.is_staff or user == current_user %}
+    	<div>
+            <a href="{% url "myauth:profile_update" pk=user.profile.pk %}">Update profile</a>
+        </div>
+    {% endif %}
+
+    <div>
+        <br>
+        <a href="{% url "myauth:users_list" %}">Back to users list</a>
+    </div>
+{% endblock %}

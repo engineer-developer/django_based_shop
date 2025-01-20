@@ -3,20 +3,44 @@ from django.contrib.auth.decorators import (
     permission_required,
     user_passes_test,
 )
+from django.contrib.auth.mixins import UserPassesTestMixin
+from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.views import LoginView, LogoutView
 from django.views import View
-from django.views.generic import TemplateView, CreateView
+from django.views.generic import (
+    TemplateView,
+    CreateView,
+    UpdateView,
+    ListView,
+    DetailView,
+)
 from django.urls import reverse, reverse_lazy
 
 from .models import Profile
+from .forms import ProfileForm, AboutMeAvatarUpdateForm
 
 
 class AboutMeView(TemplateView):
     template_name = "myauth/about-me.html"
+
+
+class AboutMeAvatarUpdateView(UpdateView):
+    template_name = "myauth/about-avatar-update.html"
+    model = Profile
+    form_class = AboutMeAvatarUpdateForm
+    success_url = reverse_lazy("myauth:about_me")
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        image = form.files.get("avatar")
+        profile = form.instance
+        profile.avatar = image
+        profile.save()
+        return response
 
 
 class RegistrationView(CreateView):
@@ -151,3 +175,62 @@ def not_authorized_view(request: HttpRequest) -> HttpResponse:
 class FooBarView(View):
     def get(self, request) -> JsonResponse:
         return JsonResponse({"foo": "bar", "spam": "eggs"})
+
+
+class ProfileCreateView(CreateView):
+    model = Profile
+    fields = "bio", "agreement_accepted", "avatar"
+    template_name = "myauth/profile_form.html"
+    success_url = reverse_lazy("myauth:about_me")
+
+    def form_valid(self, form):
+        """If the form is valid, save the associated model."""
+        user = self.request.user
+        form.instance.user = user
+        return super().form_valid(form)
+
+
+class ProfileUpdateView(UserPassesTestMixin, UpdateView):
+    def test_func(self):
+        profile = self.get_object()
+        checking_conditions = (self.request.user.pk == profile.user.pk,)
+        return self.request.user.is_staff or all(checking_conditions)
+
+    model = Profile
+    form_class = ProfileForm
+    template_name_suffix = "_update_form"
+    context_object_name = "profile"
+
+    def get_success_url(self):
+        return reverse(
+            "myauth:user_details",
+            kwargs={"pk": self.object.user.pk},
+        )
+
+    def form_valid(self, form):
+        email = form.cleaned_data.get("email")
+        user = form.instance.user
+        user.email = email
+        user.save()
+        return super().form_valid(form)
+
+
+class UsersListView(ListView):
+    template_name = "myauth/users_list.html"
+    context_object_name = "users"
+
+    def get_queryset(self):
+        return User.objects.select_related("profile")
+
+
+class UserDetailsView(DetailView):
+    template_name = "myauth/user_details.html"
+    context_object_name = "user"
+
+    def get_queryset(self):
+        return User.objects.select_related("profile")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["current_user"] = self.request.user
+        return context

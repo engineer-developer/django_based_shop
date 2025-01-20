@@ -1,6 +1,7 @@
 from django import forms
 from django.core import validators
 from django.contrib.auth.models import User, Group
+from django.forms import ClearableFileInput
 
 from shopapp.models import Product, Order
 
@@ -21,16 +22,31 @@ from shopapp.models import Product, Order
 #     )
 
 
+class MultipleClearableFileInput(forms.ClearableFileInput):
+    allow_multiple_selected = True
+
+
+class MultipleImageField(forms.ImageField):
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault("widget", MultipleClearableFileInput())
+        super().__init__(*args, **kwargs)
+
+    def clean(self, data, initial=None):
+        single_file_clean = super().clean
+        if isinstance(data, (list, tuple)):
+            result = [single_file_clean(d, initial) for d in data]
+        else:
+            result = single_file_clean(data, initial)
+        return result
+
+
 # Implemented forms.ModelForm
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = [
-            "name",
-            "price",
-            "description",
-            "discount",
-        ]
+        fields = "name", "price", "description", "discount", "preview"
+
+    images = MultipleImageField()
 
 
 class OrderForm(forms.ModelForm):
