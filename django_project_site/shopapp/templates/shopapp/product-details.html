@@ -1,33 +1,41 @@
 {% extends 'shopapp/base.html' %}
 
+{% load i18n %}
+
 {% block title %}
-    Product №{{ product.pk }}
+    {% translate 'Product' %} №{{ product.pk }}
 {% endblock %}
 
 
 {% block main %}
-	<h1>Product <strong>{{ product.name }}</strong></h1>
+	<h1>{% translate 'Product' %} <strong>{{ product.name }}</strong></h1>
     <div>
-        <div>Description: <em>{{ product.description }}</em></div>
-        <div>Price: {{ product.price }}</div>
-        <div>Discount: {{ product.discount }}</div>
-        <div>Archived: {{ product.archived }}</div>
-        <div>Created by: {{ product.created_by }}</div>
-        {% if product.preview %}
-            <img src="{{ product.preview.url }}" alt="product.preview.name">
-        {% endif %}
 
-        <h3>Images</h3>
-        <div>
-            {% for img in product.images.all %}
-            	<div>
-                    <img src="{{ img.image.url }}" alt="img.image.name">
-                    <div>{{ img.description }}</div>
-                </div>
-            {% empty %}
-                <div>No images upload yet</div>
-            {% endfor %}
-        </div>
+      <div>{% translate 'Description' %}: <em>{{ product.description }}</em></div>
+      <div>{% translate 'Price' %}: {{ product.price }}</div>
+      <div>{% translate 'Discount' %}: {{ product.discount }}</div>
+      {% if product.archived %}
+      	<div>{% translate 'Archived: True' %} </div>
+      {% else %}
+        <div>{% translate 'Archived: False' %} </div>
+      {% endif %}
+      <div>{% translate 'Created by' %}: {{ product.created_by }}</div>
+
+      {% if product.preview %}
+          <img src="{{ product.preview.url }}" alt="product.preview.name">
+      {% endif %}
+
+      <h3>Images</h3>
+      <div>
+        {% for img in product.images.all %}
+          <div>
+                <img src="{{ img.image.url }}" alt="img.image.name">
+                <div>{{ img.description }}</div>
+            </div>
+        {% empty %}
+            <div>No images upload yet</div>
+        {% endfor %}
+      </div>
 
     </div>
     <br>
