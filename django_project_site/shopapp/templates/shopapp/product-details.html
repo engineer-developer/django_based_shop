@@ -39,20 +39,29 @@
 
   </div>
   <br>
-  <div>
-    <a href="{% url 'shopapp:product_update' pk=product.pk %}">Update product</a>
-  </div>
-  <div>
-    <a href="{% url 'shopapp:product_archive' pk=product.pk %}">Archive product</a>
-  </div>
-  <div>
-    <a href="{% url 'shopapp:product_delete' pk=product.pk %}">Delete product</a>
-  </div>
-  <br>
-  <div>
-    <a href="{% url 'shopapp:products_list' %}">Back to products list</a>
-  </div>
-  <div>
-    <a href="{% url 'shopapp:orders_list' %}">Back to orders list</a>
-  </div>
+  {% url 'shopapp:product_update' pk=product.pk as product_update_url %}
+  {% url 'shopapp:product_archive' pk=product.pk as product_archive_url %}
+  {% url 'shopapp:product_delete' pk=product.pk as product_delete_url %}
+  {% url 'shopapp:products_list' as products_list_url %}
+  {% url 'shopapp:orders_list' as orders_list_url %}
+
+  {% blocktranslate %}
+    <div>
+      <a href="{{ product_update_url }}">Update product</a>
+    </div>
+    <div>
+      <a href="{{ product_archive_url }}">Archive product</a>
+    </div>
+    <div>
+      <a href="{{ product_delete_url }}">Delete product</a>
+    </div>
+    <br>
+    <div>
+      <a href="{{ products_list_url }}">Back to products list</a>
+    </div>
+    <div>
+      <a href="{{ orders_list_url }}">Back to orders list</a>
+    </div>
+  {% endblocktranslate %}
+
 {% endblock %}
