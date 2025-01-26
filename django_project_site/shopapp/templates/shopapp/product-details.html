@@ -29,7 +29,7 @@
   <div>
     <div>{% translate 'Description' %}: <em>{{ product.description }}</em></div>
     <div>{% translate 'Price' %}: {{ product.price }}</div>
-    <div>{% translate 'Discount' %}: {{ product.discount }}</div>
+    <div>{% translate 'Discount' %}: {{ product.discount }}%</div>
 
     {% with product_archive=product.archived|stringformat:"s" %}
       {% translate 'True' as true_value %}
@@ -52,7 +52,7 @@
       {% endblocktranslate %}
     </div>
     <div id="container-images">
-      {% for img in product.images.all|dictsortreversed:"pk" %}
+      {% for img in product.images.all|dictsort:"description" %}
         <div id="container-image">
           <img src="{{ img.image.url }}" alt="img.image.name">
           <div>{{ img.description }}</div>
