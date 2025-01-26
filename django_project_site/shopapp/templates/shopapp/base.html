@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    {% load i18n %}
     {% load static %}
     <link rel="icon" href="{% static 'shopapp/favicon.ico' %}" type="image/x-icon">
     <title>
@@ -15,7 +16,7 @@
 
     <header>
         {% block header %}
-            Base header
+            ---
         {% endblock %}
     </header>
 
@@ -29,20 +30,20 @@
 
     <footer>
         {% block footer %}
-            <div><br>Base footer </div>
+            <div><br>---</div>
             <div>
-                Now: {% now "d/m/Y" %}
+                {% translate 'Date' %}: {% now "d/m/Y" %}
             </div>
 
             <div>
                 {% now "l" as current_weekday %}
-                Today is {{ current_weekday|lower }}
+                {% translate 'Today is' %} {{ current_weekday|lower }}
             </div>
 
             <div>
                 {% load tz %}
                 {% timezone "Asia/Yekaterinburg" %}
-                    It is - {% now "H:i" %}
+                    {% translate 'Time' %}: {% now "H:i" %}
                 {% endtimezone %}
             </div>
         {% endblock %}

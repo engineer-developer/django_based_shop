@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-26 14:26+0000\n"
+"POT-Creation-Date: 2025-01-26 15:14+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -61,6 +61,18 @@ msgstr "Order"
 #: shopapp/models.py:65
 msgid "Orders"
 msgstr "Orders"
+
+#: shopapp/templates/shopapp/base.html:34
+msgid "Date"
+msgstr "Date"
+
+#: shopapp/templates/shopapp/base.html:39
+msgid "Today is"
+msgstr "Today is"
+
+#: shopapp/templates/shopapp/base.html:45
+msgid "Time"
+msgstr "Time"
 
 #: shopapp/templates/shopapp/product-details.html:14
 msgid "Description"
