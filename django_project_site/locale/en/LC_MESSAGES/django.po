@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-20 19:05+0000\n"
+"POT-Creation-Date: 2025-01-26 12:05+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -37,13 +37,17 @@ msgid_plural "{count} products"
 msgstr[0] "One product"
 msgstr[1] "{count} products."
 
+#: shopapp/models.py:16
+msgid "Product"
+msgstr "Product"
+
+#: shopapp/models.py:17 shopapp/templates/shopapp/products-list.html:44
+msgid "Products"
+msgstr "Products"
+
 #: shopapp/templates/shopapp/products-list.html:6
 msgid "Products list"
 msgstr "Products list"
-
-#: shopapp/templates/shopapp/products-list.html:44
-msgid "Products"
-msgstr "Products"
 
 #: shopapp/templates/shopapp/products-list.html:48
 #, python-format
