@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-26 15:14+0000\n"
+"POT-Creation-Date: 2025-01-26 17:11+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -64,53 +64,79 @@ msgstr "Заказ"
 msgid "Orders"
 msgstr "Заказы"
 
-#: shopapp/templates/shopapp/base.html:34
+#: shopapp/templates/shopapp/base.html:35
 msgid "Date"
 msgstr "Дата"
 
-#: shopapp/templates/shopapp/base.html:39
+#: shopapp/templates/shopapp/base.html:40
 msgid "Today is"
 msgstr "Сегодня"
 
-#: shopapp/templates/shopapp/base.html:45
+#: shopapp/templates/shopapp/base.html:46
 msgid "Time"
 msgstr "Время"
 
-#: shopapp/templates/shopapp/product-details.html:14
+#: shopapp/templates/shopapp/product-details.html:13
 msgid "Description"
 msgstr "Описание"
 
-#: shopapp/templates/shopapp/product-details.html:15
+#: shopapp/templates/shopapp/product-details.html:14
 #: shopapp/templates/shopapp/products-list.html:60
 msgid "Price"
 msgstr "Цена"
 
-#: shopapp/templates/shopapp/product-details.html:16
+#: shopapp/templates/shopapp/product-details.html:15
 #: shopapp/templates/shopapp/products-list.html:62
 msgid "Discount"
 msgstr "Скидка"
 
 #: shopapp/templates/shopapp/product-details.html:18
-msgid "Archived: True"
-msgstr "Архивный: Да"
+msgid "True"
+msgstr "Да"
+
+#: shopapp/templates/shopapp/product-details.html:19
+msgid "False"
+msgstr "Нет"
 
 #: shopapp/templates/shopapp/product-details.html:20
-msgid "Archived: False"
-msgstr "Архивный: Нет"
+msgid "Archived"
+msgstr "Архивный"
 
-#: shopapp/templates/shopapp/product-details.html:22
+#: shopapp/templates/shopapp/product-details.html:23
 msgid "Created by"
 msgstr "Кем создан"
 
-#: shopapp/templates/shopapp/product-details.html:28
+#: shopapp/templates/shopapp/product-details.html:29
 msgid "Images"
 msgstr "Изображения"
 
-#: shopapp/templates/shopapp/product-details.html:36
+#: shopapp/templates/shopapp/product-details.html:31
+msgid ""
+"\n"
+"        Only one image available:\n"
+"      "
+msgid_plural ""
+"\n"
+"        Available %(images_count)s images:\n"
+"      "
+msgstr[0] ""
+"\n"
+"        Доступно одно изображение:\n"
+"      "
+msgstr[1] ""
+"\n"
+"        Доступно %(images_count)s изображения:\n"
+"      "
+msgstr[2] ""
+"\n"
+"        Доступно %(images_count)s изображений:\n"
+"      "
+
+#: shopapp/templates/shopapp/product-details.html:44
 msgid "No images upload yet"
 msgstr "Изображения пока не загружены"
 
-#: shopapp/templates/shopapp/product-details.html:48
+#: shopapp/templates/shopapp/product-details.html:56
 #, python-format
 msgid ""
 "\n"

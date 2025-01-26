@@ -8,17 +8,35 @@
 
 
 {% block main %}
+  <style>
+    #container-images {
+        display: flex;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+    #container-image {
+        height: 200px;
+        margin: 10px 10px;
+        text-align: center;
+    }
+    #container-image img {
+        height: 80%;
+        object-fit: contain;
+    }
+  </style>
+
   <h1>{% translate 'Product' %} <strong>{{ product.name }}</strong></h1>
   <div>
-
     <div>{% translate 'Description' %}: <em>{{ product.description }}</em></div>
     <div>{% translate 'Price' %}: {{ product.price }}</div>
     <div>{% translate 'Discount' %}: {{ product.discount }}</div>
-    {% if product.archived %}
-      <div>{% translate 'Archived: True' %} </div>
-    {% else %}
-      <div>{% translate 'Archived: False' %} </div>
-    {% endif %}
+
+    {% with product_archive=product.archived|stringformat:"s" %}
+      {% translate 'True' as true_value %}
+      {% translate 'False' as false_value %}
+      <div>{% translate 'Archived' %}: {% translate product_archive %}</div>
+    {% endwith %}
+
     <div>{% translate 'Created by' %}: {{ product.created_by }}</div>
 
     {% if product.preview %}
@@ -27,8 +45,15 @@
 
     <h3>{% translate 'Images' %}</h3>
     <div>
-      {% for img in product.images.all %}
-        <div>
+      {% blocktranslate count images_count=product.images.all|length %}
+        Only one image available:
+      {% plural %}
+        Available {{ images_count }} images:
+      {% endblocktranslate %}
+    </div>
+    <div id="container-images">
+      {% for img in product.images.all|dictsortreversed:"pk" %}
+        <div id="container-image">
           <img src="{{ img.image.url }}" alt="img.image.name">
           <div>{{ img.description }}</div>
         </div>
