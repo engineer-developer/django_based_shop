@@ -29,6 +29,7 @@ urlpatterns = [
         "favicon.ico",
         RedirectView.as_view(url="/static/shopapp/favicon.ico", permanent=True),
     ),
+    path("api/", include("my_api_app.urls")),
 ]
 
 urlpatterns += i18n_patterns(
