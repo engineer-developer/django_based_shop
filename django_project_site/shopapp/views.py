@@ -20,7 +20,7 @@ from django.views.generic import (
     UpdateView,
 )
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.filters import SearchFilter
+from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.viewsets import ModelViewSet
 
 from shopapp.forms import GroupForm, OrderForm, ProductForm
@@ -232,6 +232,11 @@ class ProductViewSet(ModelViewSet):
         "price",
         "discount",
         "archived",
+    ]
+    ordering_fields = [
+        "name",
+        "price",
+        "discount",
     ]
 
 
