@@ -223,6 +223,7 @@ class ProductViewSet(ModelViewSet):
     filter_backends = [
         SearchFilter,
         DjangoFilterBackend,
+        OrderingFilter,
     ]
     search_fields = ["name", "description"]
     filterset_fields = [
