@@ -25,7 +25,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from shopapp.forms import GroupForm, OrderForm, ProductForm
 from shopapp.models import Order, Product, ProductImage
-from shopapp.serializers import ProductSerializer
+from shopapp.serializers import ProductSerializer, OrderSerializer
 
 
 def show_greetings(request: HttpRequest) -> HttpResponse:
@@ -345,3 +345,8 @@ class OrdersExportView(UserPassesTestMixin, View):
             for order in orders
         ]
         return JsonResponse({"orders": orders_data})
+
+
+class OrderViewSet(ModelViewSet):
+    queryset = Order.objects.select_related("user").prefetch_related("products")
+    serializer_class = OrderSerializer
