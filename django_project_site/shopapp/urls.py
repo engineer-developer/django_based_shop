@@ -3,9 +3,7 @@ from django.urls import include, path
 from django.views.generic import RedirectView
 from rest_framework.routers import DefaultRouter
 
-from shopapp.views import (
-    # create_product,
-    # create_order,
+from shopapp.views import (  # create_product,; create_order,
     GroupsListView,
     OrderCreateView,
     OrderDeleteView,
@@ -13,6 +11,7 @@ from shopapp.views import (
     OrderListView,
     OrdersExportView,
     OrderUpdateView,
+    OrderViewSet,
     ProductArchiveView,
     ProductCreateView,
     ProductDeleteView,
@@ -28,13 +27,14 @@ from shopapp.views import (
 
 app_name = "shopapp"
 
-router = DefaultRouter()
-router.register("products", ProductViewSet)
+routers = DefaultRouter()
+routers.register("products", ProductViewSet)
+routers.register("orders", OrderViewSet)
 
 
 urlpatterns = [
     path("", ShopIndexView.as_view(), name="index"),
-    path("api/", include(router.urls)),
+    path("api/", include(routers.urls)),
     path("hello/", show_greetings, name="greetings"),
     path("users/", users_list, name="users_list"),
     path("groups/", GroupsListView.as_view(), name="groups_list"),
