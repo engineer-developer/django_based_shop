@@ -19,9 +19,11 @@ from django.contrib.auth.mixins import (
     PermissionRequiredMixin,
     UserPassesTestMixin,
 )
+from rest_framework.viewsets import ModelViewSet
 
 from shopapp.forms import OrderForm, ProductForm, GroupForm
 from shopapp.models import Order, Product, ProductImage
+from shopapp.serializers import ProductSerializer
 
 
 def show_greetings(request: HttpRequest) -> HttpResponse:
@@ -211,6 +213,11 @@ class ProductsDataExportView(View):
             for product in products
         ]
         return JsonResponse({"products": products_data})
+
+
+class ProductViewSet(ModelViewSet):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
 
 
 class OrderListView(LoginRequiredMixin, ListView):
