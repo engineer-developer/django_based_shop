@@ -1,29 +1,29 @@
 from django.contrib.staticfiles.storage import staticfiles_storage
-from django.urls import path, include
+from django.urls import include, path
 from django.views.generic import RedirectView
 from rest_framework.routers import DefaultRouter
 
 from shopapp.views import (
-    show_greetings,
     # create_product,
     # create_order,
-    users_list,
-    ShopIndexView,
     GroupsListView,
-    ProductDetailsView,
-    ProductsListView,
-    OrderListView,
-    OrderDetailsView,
-    ProductCreateView,
-    ProductUpdateView,
-    ProductDeleteView,
-    ProductArchiveView,
     OrderCreateView,
-    OrderUpdateView,
     OrderDeleteView,
-    ProductsDataExportView,
+    OrderDetailsView,
+    OrderListView,
     OrdersExportView,
+    OrderUpdateView,
+    ProductArchiveView,
+    ProductCreateView,
+    ProductDeleteView,
+    ProductDetailsView,
+    ProductsDataExportView,
+    ProductsListView,
+    ProductUpdateView,
     ProductViewSet,
+    ShopIndexView,
+    show_greetings,
+    users_list,
 )
 
 app_name = "shopapp"
