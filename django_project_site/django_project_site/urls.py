@@ -20,18 +20,23 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import RedirectView
+from django.conf.urls.i18n import i18n_patterns
 
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
-    path("shop/", include("shopapp.urls")),
     path("req/", include("requestdataapp.urls")),
-    path("accounts/", include("myauth.urls")),
     path(
         "favicon.ico",
         RedirectView.as_view(url="/static/shopapp/favicon.ico", permanent=True),
     ),
 ]
+
+urlpatterns += i18n_patterns(
+    path("admin/", admin.site.urls),
+    path("accounts/", include("myauth.urls")),
+    path("shop/", include("shopapp.urls")),
+)
+
 
 if settings.DEBUG:
     urlpatterns.extend(

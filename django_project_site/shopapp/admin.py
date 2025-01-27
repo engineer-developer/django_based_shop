@@ -1,12 +1,13 @@
 from django.contrib import admin
 from django.db.models import QuerySet
 from django.http import HttpRequest
+from django.utils.translation import gettext_lazy as _
 
 from shopapp.models import Product, Order, ProductImage
 from shopapp.admin_mixins import ExportAsCSVMixin
 
 
-@admin.action(description="Archive products")
+@admin.action(description=_("Archive products"))
 def mark_archived(
     modeladmin: admin.ModelAdmin,
     request: HttpRequest,
@@ -15,7 +16,7 @@ def mark_archived(
     queryset.update(archived=True)
 
 
-@admin.action(description="Unarchive products")
+@admin.action(description=_("Unarchive products"))
 def mark_unarchived(
     modeladmin: admin.ModelAdmin,
     request: HttpRequest,
@@ -48,7 +49,7 @@ class ProductAdmin(admin.ModelAdmin, ExportAsCSVMixin):
     list_display = "pk", "name", "description_short", "price", "discount", "archived"
     list_display_links = "pk", "name"
     # readonly_fields = ("price", "discount")
-    ordering = ("name", "pk")
+    ordering = ("pk", "name")
     empty_value_display = "---"
     # list_per_page = 2
     search_fields = "name", "description", "price"

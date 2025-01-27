@@ -11,6 +11,9 @@ Shop index
 
 
 {% block main %}
+    <style>
+        p {margin: 0}
+    </style>
     <h4>List of products</h4>
     <div>
         <ul>
@@ -27,6 +30,13 @@ Shop index
         </ul>
     </div>
 
+    <div>
+        <h4>Pluralize samples</h4>
+        <p>You have {{ items }} item{{ items|pluralize }}</p>
+        <p>You have {{ items }} class{{ items|pluralize:"es" }}</p>
+        <p>You have {{ items }} cherr{{ items|pluralize:"y,ies" }}</p>
+    </div>
+
     <h4>Random 50 lorem words</h4>
     <div>
         {% lorem 50 w random %}
@@ -40,6 +50,6 @@ Shop index
         Time running: {{ time_running }}
     </div>
     <div>
-        Copyright - {{ current_date|date:"Y" }}
+        &copy; {{ current_date|date:"Y" }}
     </div>
 {% endblock %}
