@@ -1,6 +1,7 @@
 from django.contrib.staticfiles.storage import staticfiles_storage
-from django.urls import path
+from django.urls import path, include
 from django.views.generic import RedirectView
+from rest_framework.routers import DefaultRouter
 
 from shopapp.views import (
     show_greetings,
@@ -22,12 +23,18 @@ from shopapp.views import (
     OrderDeleteView,
     ProductsDataExportView,
     OrdersExportView,
+    ProductViewSet,
 )
 
 app_name = "shopapp"
 
+router = DefaultRouter()
+router.register("products", ProductViewSet)
+
+
 urlpatterns = [
     path("", ShopIndexView.as_view(), name="index"),
+    path("api/", include(router.urls)),
     path("hello/", show_greetings, name="greetings"),
     path("users/", users_list, name="users_list"),
     path("groups/", GroupsListView.as_view(), name="groups_list"),
