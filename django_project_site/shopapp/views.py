@@ -350,3 +350,20 @@ class OrdersExportView(UserPassesTestMixin, View):
 class OrderViewSet(ModelViewSet):
     queryset = Order.objects.select_related("user").prefetch_related("products")
     serializer_class = OrderSerializer
+    filter_backends = [
+        SearchFilter,
+        DjangoFilterBackend,
+        OrderingFilter,
+    ]
+    search_fields = ["delivery_address", "promocode"]
+    filterset_fields = [
+        "delivery_address",
+        "promocode",
+        "user",
+        "products",
+    ]
+    ordering_fields = [
+        "delivery_address",
+        "promocode",
+        "user",
+    ]
