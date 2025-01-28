@@ -218,6 +218,11 @@ class ProductsDataExportView(View):
 
 
 class ProductViewSet(ModelViewSet):
+    """
+    Набор представлений для действий над Product
+    Полный набор CRUD для сущностей товаров
+    """
+
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     filter_backends = [
