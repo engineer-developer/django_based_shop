@@ -21,7 +21,11 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import RedirectView
 from django.conf.urls.i18n import i18n_patterns
-
+from drf_spectacular.views import (
+    SpectacularAPIView,
+    SpectacularRedocView,
+    SpectacularSwaggerView,
+)
 
 urlpatterns = [
     path(
@@ -32,6 +36,17 @@ urlpatterns = [
     path(
         "favicon.ico",
         RedirectView.as_view(url="/static/shopapp/favicon.ico", permanent=True),
+    ),
+    path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
+    path(
+        "api/schema/swagger/",
+        SpectacularSwaggerView.as_view(url_name="schema"),
+        name="schema-swagger",
+    ),
+    path(
+        "api/schema/redoc/",
+        SpectacularRedocView.as_view(url_name="schema"),
+        name="schema-redoc",
     ),
     path("api/", include("my_api_app.urls")),
 ]
