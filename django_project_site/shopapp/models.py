@@ -80,5 +80,6 @@ class Order(models.Model):
 
     @property
     def total_price(self):
+        """Стоимость всего заказа."""
         prices_sum = sum([product.price for product in self.products.all()])
         return prices_sum
