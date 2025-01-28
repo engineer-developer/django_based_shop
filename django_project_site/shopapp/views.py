@@ -1,6 +1,11 @@
 from datetime import datetime
 from timeit import default_timer
 
+from django.contrib.auth.mixins import (
+    LoginRequiredMixin,
+    PermissionRequiredMixin,
+    UserPassesTestMixin,
+)
 from django.contrib.auth.models import Group, User
 from django.db.models.aggregates import Count
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
@@ -8,20 +13,19 @@ from django.shortcuts import redirect, render, reverse
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import (
-    ListView,
-    DetailView,
     CreateView,
-    UpdateView,
     DeleteView,
+    DetailView,
+    ListView,
+    UpdateView,
 )
-from django.contrib.auth.mixins import (
-    LoginRequiredMixin,
-    PermissionRequiredMixin,
-    UserPassesTestMixin,
-)
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework.viewsets import ModelViewSet
 
-from shopapp.forms import OrderForm, ProductForm, GroupForm
+from shopapp.forms import GroupForm, OrderForm, ProductForm
 from shopapp.models import Order, Product, ProductImage
+from shopapp.serializers import ProductSerializer, OrderSerializer
 
 
 def show_greetings(request: HttpRequest) -> HttpResponse:
@@ -213,6 +217,29 @@ class ProductsDataExportView(View):
         return JsonResponse({"products": products_data})
 
 
+class ProductViewSet(ModelViewSet):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    filter_backends = [
+        SearchFilter,
+        DjangoFilterBackend,
+        OrderingFilter,
+    ]
+    search_fields = ["name", "description"]
+    filterset_fields = [
+        "name",
+        "description",
+        "price",
+        "discount",
+        "archived",
+    ]
+    ordering_fields = [
+        "name",
+        "price",
+        "discount",
+    ]
+
+
 class OrderListView(LoginRequiredMixin, ListView):
     """Get orders list.
 
@@ -318,3 +345,25 @@ class OrdersExportView(UserPassesTestMixin, View):
             for order in orders
         ]
         return JsonResponse({"orders": orders_data})
+
+
+class OrderViewSet(ModelViewSet):
+    queryset = Order.objects.select_related("user").prefetch_related("products")
+    serializer_class = OrderSerializer
+    filter_backends = [
+        SearchFilter,
+        DjangoFilterBackend,
+        OrderingFilter,
+    ]
+    search_fields = ["delivery_address", "promocode"]
+    filterset_fields = [
+        "delivery_address",
+        "promocode",
+        "user",
+        "products",
+    ]
+    ordering_fields = [
+        "delivery_address",
+        "promocode",
+        "user",
+    ]
