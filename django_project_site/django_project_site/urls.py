@@ -24,6 +24,10 @@ from django.conf.urls.i18n import i18n_patterns
 
 
 urlpatterns = [
+    path(
+        "admin/doc/",
+        include("django.contrib.admindocs.urls"),
+    ),
     path("req/", include("requestdataapp.urls")),
     path(
         "favicon.ico",
