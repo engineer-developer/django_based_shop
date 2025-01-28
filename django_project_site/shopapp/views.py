@@ -28,6 +28,7 @@ from django.views.generic import (
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.viewsets import ModelViewSet
+from drf_spectacular.utils import extend_schema, OpenApiResponse
 
 from shopapp.forms import GroupForm, OrderForm, ProductForm
 from shopapp.models import Order, Product, ProductImage
@@ -250,6 +251,19 @@ class ProductViewSet(ModelViewSet):
         "price",
         "discount",
     ]
+
+    @extend_schema(
+        summary="Get one product by ID",
+        description="Get product, return 404 if not found",
+        responses={
+            "200": ProductSerializer,
+            "404": OpenApiResponse(
+                description="Product not found",
+            ),
+        },
+    )
+    def retrieve(self, *args, **kwargs):
+        return super(self).retrieve(*args, **kwargs)
 
 
 class OrderListView(LoginRequiredMixin, ListView):
