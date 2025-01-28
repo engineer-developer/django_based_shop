@@ -223,6 +223,7 @@ class ProductsDataExportView(View):
         return JsonResponse({"products": products_data})
 
 
+@extend_schema(description="Product views CRUD.", tags=["Products"])
 class ProductViewSet(ModelViewSet):
     """
     Набор представлений для действий над Product
