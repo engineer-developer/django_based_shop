@@ -1,3 +1,9 @@
+"""
+В этом модуле лежат различные наборы представлений.
+
+Разные view интернет-магазина: по товарам, заказам и т.д.
+"""
+
 from datetime import datetime
 from timeit import default_timer
 
