@@ -1,3 +1,9 @@
+"""
+В этом модуле лежат различные наборы представлений.
+
+Разные view интернет-магазина: по товарам, заказам и т.д.
+"""
+
 from datetime import datetime
 from timeit import default_timer
 
@@ -22,6 +28,7 @@ from django.views.generic import (
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.viewsets import ModelViewSet
+from drf_spectacular.utils import extend_schema, OpenApiResponse
 
 from shopapp.forms import GroupForm, OrderForm, ProductForm
 from shopapp.models import Order, Product, ProductImage
@@ -217,7 +224,13 @@ class ProductsDataExportView(View):
         return JsonResponse({"products": products_data})
 
 
+@extend_schema(description="Product views CRUD.", tags=["Products"])
 class ProductViewSet(ModelViewSet):
+    """
+    Набор представлений для действий над Product
+    Полный набор CRUD для сущностей товаров
+    """
+
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     filter_backends = [
@@ -238,6 +251,19 @@ class ProductViewSet(ModelViewSet):
         "price",
         "discount",
     ]
+
+    @extend_schema(
+        summary="Get one product by ID",
+        description="Get product, return 404 if not found",
+        responses={
+            "200": ProductSerializer,
+            "404": OpenApiResponse(
+                description="Product not found",
+            ),
+        },
+    )
+    def retrieve(self, *args, **kwargs):
+        return super(self).retrieve(*args, **kwargs)
 
 
 class OrderListView(LoginRequiredMixin, ListView):
@@ -347,6 +373,7 @@ class OrdersExportView(UserPassesTestMixin, View):
         return JsonResponse({"orders": orders_data})
 
 
+@extend_schema(description="Order views CRUD.", tags=["Orders"])
 class OrderViewSet(ModelViewSet):
     queryset = Order.objects.select_related("user").prefetch_related("products")
     serializer_class = OrderSerializer
@@ -367,3 +394,74 @@ class OrderViewSet(ModelViewSet):
         "promocode",
         "user",
     ]
+
+    @extend_schema(
+        summary="Get list of orders",
+        description="Get orders, uses filters, searching and ordering",
+        external_docs={
+            "url": "http://localhost:8000/en/shop/orders/",
+            "description": "Order list",
+        },
+    )
+    def list(self, *args, **kwargs):
+        return super().list(*args, **kwargs)
+
+    @extend_schema(
+        summary="Create new order",
+        description="Create order by send data in body",
+        responses={
+            "201": OpenApiResponse(
+                description="Order created",
+                response=OrderSerializer,
+            ),
+            "400": OpenApiResponse(description="Bad request"),
+        },
+    )
+    def create(self, *args, **kwargs):
+        return super().create(*args, **kwargs)
+
+    @extend_schema(
+        summary="Get order by ID",
+        description="Fetch order details by ID",
+        responses={
+            "200": OrderSerializer,
+            "404": OpenApiResponse(description="Order not found"),
+        },
+    )
+    def retrieve(self, *args, **kwargs):
+        return super().retrieve(*args, **kwargs)
+
+    @extend_schema(
+        summary="Update order",
+        description="Full update order by ID",
+        responses={
+            "200": OrderSerializer,
+            "400": OpenApiResponse(description="Bad request"),
+            "404": OpenApiResponse(description="Order not found"),
+        },
+    )
+    def update(self, *args, **kwargs):
+        return super().update(*args, **kwargs)
+
+    @extend_schema(
+        summary="Partial update order",
+        description="Partial update order by ID",
+        responses={
+            "200": OrderSerializer,
+            "400": OpenApiResponse(description="Bad request"),
+            "404": OpenApiResponse(description="Order not found"),
+        },
+    )
+    def partial_update(self, *args, **kwargs):
+        return super().partial_update(*args, **kwargs)
+
+    @extend_schema(
+        summary="Delete order",
+        description="Delete order with given ID",
+        responses={
+            "204": OpenApiResponse(description="No response body"),
+            "404": OpenApiResponse(description="Order not found"),
+        },
+    )
+    def destroy(self, *args, **kwargs):
+        return super().destroy(*args, **kwargs)

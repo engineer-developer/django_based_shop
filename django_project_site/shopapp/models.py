@@ -11,6 +11,13 @@ def product_preview_directory_path(instance: "Product", filename: str) -> str:
 
 
 class Product(models.Model):
+    """
+    Модель Product представляет товар,
+    который можно продавать в интернет магазине.
+
+    Заказы тут: :model:`shopapp.Order`
+    """
+
     class Meta:
         ordering = ["name"]
         verbose_name = _("Product")
@@ -73,5 +80,6 @@ class Order(models.Model):
 
     @property
     def total_price(self):
+        """Стоимость всего заказа."""
         prices_sum = sum([product.price for product in self.products.all()])
         return prices_sum
