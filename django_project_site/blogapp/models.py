@@ -9,13 +9,13 @@ class Author(models.Model):
         return f"<Author {self.name}> pk={self.pk}"
 
 
-# class Category(models.Model):
-#     name = models.CharField(max_length=40)
-#
-#     def __str__(self):
-#         return f"<Category {self.name}> pk={self.pk}"
-#
-#
+class Category(models.Model):
+    name = models.CharField(max_length=40)
+
+    def __str__(self):
+        return f"<Category {self.name}> pk={self.pk}"
+
+
 # class Tag(models.Model):
 #     name = models.CharField(max_length=20)
 #
