@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "requestdataapp.apps.RequestdataappConfig",
     "myauth.apps.MyauthConfig",
     "my_api_app.apps.MyApiAppConfig",
+    "blogapp.apps.BlogappConfig",
 ]
 
 MIDDLEWARE = [
@@ -63,7 +64,6 @@ MIDDLEWARE = [
     # "requestdataapp.middlewares.set_useragent_on_request_middleware",
     # "requestdataapp.middlewares.CountRequestsMiddleware",
     # "requestdataapp.middlewares.ThrottlingMiddleware",
-    "blogapp.apps.BlogappConfig",
 ]
 
 ROOT_URLCONF = "django_project_site.urls"
