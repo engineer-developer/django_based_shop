@@ -17,7 +17,7 @@ class Command(BaseCommand):
             total=Sum("products__price", default=0),
             products_count=Count("products"),
         ).order_by("total")
-        
+
         for order in orders:
             print(
                 f"Order #{order.pk} "
