@@ -6,21 +6,21 @@ class Author(models.Model):
     bio = models.TextField(null=True, blank=True)
 
     def __str__(self):
-        return f"<Author {self.name}> pk={self.pk}"
+        return self.name
 
 
 class Category(models.Model):
     name = models.CharField(max_length=40)
 
     def __str__(self):
-        return f"<Category {self.name}> pk={self.pk}"
+        return self.name
 
 
 class Tag(models.Model):
     name = models.CharField(max_length=20)
 
     def __str__(self):
-        return f"<Tag {self.name}> pk={self.pk}"
+        return self.name
 
 
 class Article(models.Model):
@@ -30,6 +30,3 @@ class Article(models.Model):
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     tags = models.ManyToManyField(Tag, related_name="articles")
-
-    def __str__(self):
-        return f"<Article> pk={self.pk}"
