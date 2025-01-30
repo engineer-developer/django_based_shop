@@ -1,0 +1,36 @@
+{% extends 'blogapp/base.html' %}
+
+
+
+{% block title %}
+	List of articles 
+{% endblock %}
+
+{% block body %}
+  <style>
+    #article-block > h4 {
+        margin: 0;
+    }
+    #article-block p {
+        margin: 0 0 0 10px;
+    }
+  </style>
+
+	<h1>Articles:</h1>
+  <div>
+    {% for article in articles %}
+      <div id="article-block">
+        <h4>Title: {{ article.title }}</h4>
+        <p>Public at: {{ article.pub_date }}</p>
+        <p>Author: {{ article.author }}</p>
+        <p>Category: {{ article.category }}</p>
+        <p>Tags: {{ article.tags.all|join:", " }}</p>
+      </div>
+      <br>
+    {% empty%}
+      <div>Articles not public yet</div>
+    {% endfor %}
+
+
+  </div>
+{% endblock %}
