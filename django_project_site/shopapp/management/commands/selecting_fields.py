@@ -12,8 +12,12 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self.stdout.write("Start demo select fields")
 
-        products_values = Product.objects.values("pk", "name")
-        for p_values in products_values:
-            print(p_values)
+        # products_values = Product.objects.values("pk", "name")
+        # for p_values in products_values:
+        #     print(p_values)
 
-        self.stdout.write(f"Done")
+        users_info = User.objects.values_list("pk", "username")
+        for user_info in users_info:
+            print(user_info)
+
+        self.stdout.write(self.style.SUCCESS("Done"))
