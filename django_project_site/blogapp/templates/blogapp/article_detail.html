@@ -1,0 +1,30 @@
+{% extends 'blogapp/base.html' %}
+
+{% block title %}
+	Article detail
+{% endblock %}
+
+{% block body %}
+  <style>
+    #article-block p {
+        margin: 0 0 0 10px;
+    }
+  </style>
+
+	<h1>{{ article.title }}</h1>
+  <div>
+    <div id="article-block">
+      <p>Public at: {{ article.pub_date }}</p>
+      <p>Author: {{ article.author }}</p>
+      <p>Category: {{ article.category }}</p>
+      <p>Tags: {{ article.tags.all|join:", " }}</p>
+      <br>
+      <p>Content:</p>
+      <p>{{ article.content }}</p>
+    </div>
+    <br>
+    <div>
+      <a href="{% url "blogapp:articles_list" %}">Back to articles list</a>
+    </div>
+  </div>
+{% endblock %}

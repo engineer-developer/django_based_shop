@@ -8,8 +8,8 @@
 
 {% block body %}
   <style>
-    #article-block > h4 {
-        margin: 0;
+    #article-detail-ref {
+        margin: 0 0 0 0;
     }
     #article-block p {
         margin: 0 0 0 10px;
@@ -20,7 +20,9 @@
   <div>
     {% for article in articles %}
       <div id="article-block">
-        <h4>Title: {{ article.title }}</h4>
+        <a href="{% url "blogapp:article_detail" pk=article.pk %}">
+          <h4 id="article-detail-ref">Title: {{ article.title }}</h4>
+        </a>
         <p>Public at: {{ article.pub_date }}</p>
         <p>Author: {{ article.author }}</p>
         <p>Category: {{ article.category }}</p>
