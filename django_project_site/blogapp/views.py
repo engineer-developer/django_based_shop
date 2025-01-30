@@ -12,6 +12,7 @@ class ArticleListView(ListView):
         .select_related("category")
         .prefetch_related("tags")
         .order_by("-pub_date")
+        .defer("content")
     )
     template_name = "blogapp/article_list.html"
     context_object_name = "articles"
