@@ -7,7 +7,7 @@ from shopapp.models import Product, Order
 
 
 class Command(BaseCommand):
-    """Make bulk actions"""
+    """Make bulk create"""
 
     def handle(self, *args, **options):
         self.stdout.write("Start demo bulk actions")
