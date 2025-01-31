@@ -175,7 +175,6 @@ SPECTACULAR_SETTINGS = {
     "SERVE_INCLUDE_SCHEMA": False,
 }
 
-# Logging rule
 # Logging settings for view SQL-QUERIES in console
 # LOGGING = {
 #     "version": 1,
@@ -198,24 +197,18 @@ SPECTACULAR_SETTINGS = {
 #         }
 #     },
 # }
+
+# Logging settings for app logging
 LOGGING = {
     "version": 1,
-    "filters": {
-        "require_debug_true": {
-            "()": "django.utils.log.RequireDebugTrue",
-        }
-    },
+    "disable_existing_loggers": False,
     "handlers": {
         "console": {
-            "level": "DEBUG",
-            "filters": ["require_debug_true"],
             "class": "logging.StreamHandler",
         }
     },
-    "loggers": {
-        "django.db.backends": {
-            "level": "DEBUG",
-            "handlers": ["console"],
-        }
+    "root": {
+        "handlers": ["console"],
+        "level": "INFO",
     },
 }
