@@ -4,6 +4,7 @@
 Разные view интернет-магазина: по товарам, заказам и т.д.
 """
 
+import socket
 import logging
 from datetime import datetime
 from timeit import default_timer
@@ -65,6 +66,12 @@ class ShopIndexView(View):
             "current_date": datetime.now(),
             "items": 3,
         }
+
+        host, aliaslist, ips = socket.gethostbyname_ex(socket.gethostname())
+        logger.info(f"Host: {host}")
+        logger.info(f"Alias list: {aliaslist}")
+        logger.info(f"IP list: {ips}")
+
         logger.debug("Products for shop index %s", products)
         logger.info("Rendering shop index")
         return render(request, "shopapp/shop-index.html", context=context)
