@@ -62,6 +62,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.locale.LocaleMiddleware",
     "django.contrib.admindocs.middleware.XViewMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     # "requestdataapp.middlewares.set_useragent_on_request_middleware",
     # "requestdataapp.middlewares.CountRequestsMiddleware",
     # "requestdataapp.middlewares.ThrottlingMiddleware",
