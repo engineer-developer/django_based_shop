@@ -65,6 +65,8 @@ class ShopIndexView(View):
             "current_date": datetime.now(),
             "items": 3,
         }
+        logger.debug("Products for shop index %s", products)
+        logger.info("Rendering shop index")
         return render(request, "shopapp/shop-index.html", context=context)
 
 
