@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.admindocs",
+    "debug_toolbar",
     "rest_framework",
     "django_filters",
     "drf_spectacular",
