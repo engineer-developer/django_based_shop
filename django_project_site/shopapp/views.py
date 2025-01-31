@@ -4,6 +4,7 @@
 Разные view интернет-магазина: по товарам, заказам и т.д.
 """
 
+import logging
 from datetime import datetime
 from timeit import default_timer
 
@@ -33,6 +34,9 @@ from drf_spectacular.utils import extend_schema, OpenApiResponse
 from shopapp.forms import GroupForm, OrderForm, ProductForm
 from shopapp.models import Order, Product, ProductImage
 from shopapp.serializers import ProductSerializer, OrderSerializer
+
+
+logger = logging.getLogger(__name__)
 
 
 def show_greetings(request: HttpRequest) -> HttpResponse:
