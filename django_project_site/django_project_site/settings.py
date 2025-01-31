@@ -199,6 +199,10 @@ SPECTACULAR_SETTINGS = {
 # }
 
 # Logging settings for app logging
+LOGFILE_NAME = BASE_DIR / "logs" / "logfile.log"
+LOGFILE_SIZE = 1 * 1024 * 1024
+LOGFILE_COUNT = 3
+
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
@@ -208,11 +212,21 @@ LOGGING = {
     "handlers": {
         "console": {
             "class": "logging.StreamHandler",
-        }
             "formatter": "verbose",
+        },
+        "logfile": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": LOGFILE_NAME,
+            "maxBytes": LOGFILE_SIZE,
+            "backupCount": LOGFILE_COUNT,
+            "formatter": "verbose",
+        },
     },
     "root": {
-        "handlers": ["console"],
+        "handlers": [
+            "console",
+            "logfile",
+        ],
         "level": "INFO",
     },
 }
