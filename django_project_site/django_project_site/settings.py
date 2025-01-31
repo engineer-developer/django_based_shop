@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "requestdataapp.apps.RequestdataappConfig",
     "myauth.apps.MyauthConfig",
     "my_api_app.apps.MyApiAppConfig",
+    "blogapp.apps.BlogappConfig",
 ]
 
 MIDDLEWARE = [
@@ -172,4 +173,27 @@ SPECTACULAR_SETTINGS = {
     "DESCRIPTION": "Django Project with shop app and custom auth",
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
+}
+
+# Logging rule
+LOGGING = {
+    "version": 1,
+    "filters": {
+        "require_debug_true": {
+            "()": "django.utils.log.RequireDebugTrue",
+        }
+    },
+    "handlers": {
+        "console": {
+            "level": "DEBUG",
+            "filters": ["require_debug_true"],
+            "class": "logging.StreamHandler",
+        }
+    },
+    "loggers": {
+        "django.db.backends": {
+            "level": "DEBUG",
+            "handlers": ["console"],
+        }
+    },
 }

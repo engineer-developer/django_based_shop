@@ -49,6 +49,7 @@ urlpatterns = [
         name="schema-redoc",
     ),
     path("api/", include("my_api_app.urls")),
+    path("blog/", include("blogapp.urls")),
 ]
 
 urlpatterns += i18n_patterns(
