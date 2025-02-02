@@ -4,6 +4,7 @@
 Разные view интернет-магазина: по товарам, заказам и т.д.
 """
 
+from csv import DictWriter
 import socket
 import logging
 from datetime import datetime
@@ -28,6 +29,8 @@ from django.views.generic import (
     UpdateView,
 )
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.request import Request
+from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.viewsets import ModelViewSet
 from drf_spectacular.utils import extend_schema, OpenApiResponse
@@ -277,6 +280,22 @@ class ProductViewSet(ModelViewSet):
     )
     def retrieve(self, *args, **kwargs):
         return super(self).retrieve(*args, **kwargs)
+
+    @action(detail=False, methods=["get"])
+    def download_csv(self, request: Request):
+
+        response = HttpResponse(content_type="text/csv")
+        filename = "products-export.csv"
+        response["Content-Disposition"] = f"attachment; filename={filename}"
+        fields = ["name", "description", "price", "discount"]
+        queryset = self.filter_queryset(self.get_queryset()).only(*fields)
+        writer = DictWriter(response, fieldnames=fields)
+        writer.writeheader()
+
+        for product in queryset:
+            writer.writerow({field: getattr(product, field) for field in fields})
+
+        return response
 
 
 class OrderListView(LoginRequiredMixin, ListView):
