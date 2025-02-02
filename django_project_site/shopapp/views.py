@@ -30,15 +30,17 @@ from django.views.generic import (
 )
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.request import Request
+from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.parsers import MultiPartParser
 from drf_spectacular.utils import extend_schema, OpenApiResponse
 
 from shopapp.forms import GroupForm, OrderForm, ProductForm
 from shopapp.models import Order, Product, ProductImage
 from shopapp.serializers import ProductSerializer, OrderSerializer
-
+from shopapp.common import save_csv_products
 
 logger = logging.getLogger(__name__)
 
@@ -296,6 +298,19 @@ class ProductViewSet(ModelViewSet):
             writer.writerow({field: getattr(product, field) for field in fields})
 
         return response
+
+    @action(
+        detail=False,
+        methods=["post"],
+        parser_classes=[MultiPartParser],
+    )
+    def upload_csv(self, request: Request):
+        products = save_csv_products(
+            request.FILES["file"].file,
+            encoding=request.encoding,
+        )
+        serializer = self.get_serializer(products, many=True)
+        return Response(serializer.data)
 
 
 class OrderListView(LoginRequiredMixin, ListView):
