@@ -12,6 +12,7 @@ class ProfileInline(admin.StackedInline):
 
 class ProductsInline(admin.StackedInline):
     model = Product
+    # fields = ["name", "price", "discount"]
     extra = 0
 
 
