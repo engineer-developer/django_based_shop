@@ -33,6 +33,7 @@ class Product(models.Model):
         User,
         related_name="products",
         on_delete=models.PROTECT,
+        default=1,
     )
     preview = models.ImageField(
         null=True,
