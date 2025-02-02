@@ -43,6 +43,7 @@ class ProductInline(admin.StackedInline):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin, ExportAsCSVMixin):
+    change_list_template = "shopapp/products-change-list.html"
     actions = [
         mark_archived,
         mark_unarchived,
