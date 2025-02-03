@@ -10,6 +10,7 @@ class ArticleListView(ListView):
         Article.objects.select_related("author")
         .select_related("category")
         .prefetch_related("tags")
+        .filter(pub_date__isnull=False)
         .order_by("-pub_date")
         .defer("content")
     )
