@@ -33,7 +33,7 @@ class ArticleDetailView(DetailView):
 
 
 class LatestArticlesFeed(Feed):
-    """ Returns latest articles feed (RSS) """
+    """Returns latest articles feed (RSS)"""
 
     title = "Blog articles (latest)"
     description = "Updates on changes and additions blog articles"
