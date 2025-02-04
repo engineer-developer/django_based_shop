@@ -16,6 +16,7 @@ from django.contrib.auth.mixins import (
     UserPassesTestMixin,
 )
 from django.contrib.auth.models import Group, User
+from django.contrib.syndication.views import Feed
 from django.db.models.aggregates import Count
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render, reverse
@@ -311,6 +312,34 @@ class ProductViewSet(ModelViewSet):
         )
         serializer = self.get_serializer(products, many=True)
         return Response(serializer.data)
+
+
+class LatestProductsFeed(Feed):
+    """Latest product feed (RSS)"""
+
+    title = "Shop products (latest)"
+    description = "Updates on changes and additions new products to shop"
+    link = reverse_lazy("shopapp:products_list")
+
+    def items(self):
+        return (
+            Product.objects.select_related("created_by")
+            .filter(archived=False)
+            .defer("preview")
+            .order_by("-created_at")[:6]
+        )
+
+    def item_title(self, item: Product):
+        return item.name
+
+    def item_description(self, item: Product):
+        return "{}\n{}".format(item.price, item.description)
+
+    def item_link(self, item: Product):
+        return item.get_absolute_url()
+
+    def item_pubdate(self, item: Product):
+        return item.created_at
 
 
 class OrderListView(LoginRequiredMixin, ListView):
