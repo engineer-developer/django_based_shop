@@ -211,5 +211,10 @@ class OrderAdmin(admin.ModelAdmin):
                 self.import_csv,
                 name="import_orders_csv",
             ),
+            path(
+                "import-orders-json/",
+                self.import_json,
+                name="import_orders_json",
+            ),
         ]
         return new_urls + urls
