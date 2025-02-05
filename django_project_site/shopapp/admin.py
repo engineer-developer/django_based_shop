@@ -1,5 +1,7 @@
 from django.contrib import admin
 from django.db.models import QuerySet
+from django import forms
+from django.db import models
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import path
@@ -147,6 +149,11 @@ class OrderAdmin(admin.ModelAdmin):
         OrderProductsInline,
     ]
     list_display = "delivery_address", "promocode", "created_at", "user_verbose"
+    formfield_overrides = {
+        models.TextField: {
+            "widget": forms.Textarea(attrs={"rows": 2, "cols": 35}),
+        }
+    }
 
     def get_queryset(self, request):
         return Order.objects.select_related("user").prefetch_related("products")
