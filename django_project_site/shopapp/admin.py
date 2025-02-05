@@ -142,6 +142,7 @@ class OrderProductsInline(admin.StackedInline):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
+    change_list_template = "shopapp/orders_change_list.html"
     inlines = [
         OrderProductsInline,
     ]
