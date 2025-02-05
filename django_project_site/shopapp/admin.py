@@ -7,10 +7,10 @@ from django.shortcuts import render, redirect
 from django.urls import path
 from django.utils.translation import gettext_lazy as _
 
-from shopapp.common import save_csv_products, save_csv_orders
+from shopapp.common import save_csv_products, save_csv_orders, save_json_orders
 from shopapp.models import Product, Order, ProductImage
 from shopapp.admin_mixins import ExportAsCSVMixin
-from shopapp.forms import CSVImportForm
+from shopapp.forms import CSVImportForm, JSONImportForm
 
 
 @admin.action(description=_("Archive products"))
@@ -180,6 +180,27 @@ class OrderAdmin(admin.ModelAdmin):
             )
 
             self.message_user(request, "Successfully imported orders from CSV.")
+            return redirect("..")
+
+    def import_json(self, request: HttpRequest) -> HttpResponse:
+        """Import orders from a JSON file."""
+
+        if request.method == "GET":
+            form = JSONImportForm()
+            context = {"form": form}
+            return render(request, "admin/json_form.html", context)
+        elif request.method == "POST":
+            form = JSONImportForm(request.POST, request.FILES)
+            if not form.is_valid():
+                context = {"form": form}
+                return render(request, "admin/json_form.html", context, status=400)
+
+            save_json_orders(
+                file=form.files["json_file"].file,
+                encoding=request.encoding,
+            )
+
+            self.message_user(request, "Successfully imported orders from JSON.")
             return redirect("..")
 
     def get_urls(self):
