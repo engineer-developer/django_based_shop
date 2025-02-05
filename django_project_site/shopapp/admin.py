@@ -181,3 +181,14 @@ class OrderAdmin(admin.ModelAdmin):
 
             self.message_user(request, "Successfully imported orders from CSV.")
             return redirect("..")
+
+    def get_urls(self):
+        urls = super().get_urls()
+        new_urls = [
+            path(
+                "import-orders-csv/",
+                self.import_csv,
+                name="import_orders_csv",
+            ),
+        ]
+        return new_urls + urls
