@@ -7,7 +7,7 @@ from django.shortcuts import render, redirect
 from django.urls import path
 from django.utils.translation import gettext_lazy as _
 
-from shopapp.common import save_csv_products
+from shopapp.common import save_csv_products, save_csv_orders
 from shopapp.models import Product, Order, ProductImage
 from shopapp.admin_mixins import ExportAsCSVMixin
 from shopapp.forms import CSVImportForm
@@ -160,3 +160,24 @@ class OrderAdmin(admin.ModelAdmin):
 
     def user_verbose(self, obj: Order) -> str:
         return obj.user.first_name or obj.user.username
+
+    def import_csv(self, request: HttpRequest) -> HttpResponse:
+        """Import orders from a CSV file."""
+
+        if request.method == "GET":
+            form = CSVImportForm()
+            context = {"form": form}
+            return render(request, "admin/csv_form.html", context)
+        elif request.method == "POST":
+            form = CSVImportForm(request.POST, request.FILES)
+            if not form.is_valid():
+                context = {"form": form}
+                return render(request, "admin/csv_form.html", context, status=400)
+
+            save_csv_orders(
+                file=form.files["csv_file"].file,
+                encoding=request.encoding,
+            )
+
+            self.message_user(request, "Successfully imported orders from CSV.")
+            return redirect("..")
