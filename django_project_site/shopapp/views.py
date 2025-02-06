@@ -60,7 +60,7 @@ def show_greetings(request: HttpRequest) -> HttpResponse:
 
 class ShopIndexView(View):
 
-    @method_decorator(cache_page(60 * 2))
+    # @method_decorator(cache_page(60 * 2))
     def get(self, request: HttpRequest) -> HttpResponse:
         """Get index page."""
 
