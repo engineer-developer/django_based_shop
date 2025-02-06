@@ -25,6 +25,7 @@ from shopapp.views import (  # create_product,; create_order,
     show_greetings,
     users_list,
     LatestProductsFeed,
+    UserOrdersListView,
 )
 
 app_name = "shopapp"
@@ -64,4 +65,7 @@ urlpatterns = [
     path("orders/<int:pk>/", OrderDetailsView.as_view(), name="order_detail"),
     path("orders/<int:pk>/update/", OrderUpdateView.as_view(), name="order_update"),
     path("orders/<int:pk>/delete/", OrderDeleteView.as_view(), name="order_delete"),
+    path(
+        "users/<int:user_id>/orders/", UserOrdersListView.as_view(), name="user_orders"
+    ),
 ]
