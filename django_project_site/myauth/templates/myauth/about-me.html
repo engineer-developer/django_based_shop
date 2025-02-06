@@ -1,4 +1,6 @@
 {% extends 'myauth/base.html' %}
+{% load cache %}
+
 
 {% block title %}
 	About me
@@ -6,9 +8,14 @@
 
 
 {% block body %}
-	<h1>User info</h1>
+    <h1>User info</h1>
+    <div>
+      Sample random digits: {% now "u" %}
+    </div>
+
     {% if user.is_authenticated %}
-    	<h2>Detail</h2>
+    	{% cache 300 userinfo user.username %}
+        <h2>Detail</h2>
         <div>Username: {% firstof user.username "No username" %}</div>
         <div>First name: {% firstof user.first_name "No first name" %}</div>
         <div>Last name: {% firstof user.last_name "No last name" %}</div>
@@ -35,6 +42,7 @@
                 <a href="{% url "myauth:profile_create" %}">Create profile</a>
             {% endif %}
         </div>
+      {% endcache %}
 
     {% else %}
         <h2>User is anonymous</h2>
