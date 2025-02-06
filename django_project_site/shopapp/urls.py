@@ -35,7 +35,8 @@ routers.register("orders", OrderViewSet)
 
 
 urlpatterns = [
-    path("", cache_page(60 * 3)(ShopIndexView.as_view()), name="index"),
+    # path("", cache_page(60 * 3)(ShopIndexView.as_view()), name="index"),
+    path("", ShopIndexView.as_view(), name="index"),
     path("api/", include(routers.urls)),
     path("hello/", show_greetings, name="greetings"),
     path("users/", users_list, name="users_list"),
