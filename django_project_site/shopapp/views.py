@@ -558,3 +558,28 @@ class OrderViewSet(ModelViewSet):
     )
     def destroy(self, *args, **kwargs):
         return super().destroy(*args, **kwargs)
+
+
+class UserOrdersListView(ListView):
+    """Get user orders."""
+
+    template_name = "shopapp/user_orders_list.html"
+    context_object_name = "orders"
+
+    def get_queryset(self):
+        orders = (
+            Order.objects.filter(user=self.kwargs.get("user_id"))
+            .select_related("user")
+            .prefetch_related("products")
+            .annotate(products_count=Count("products"))
+            .filter(products_count__gt=0)
+            .order_by("pk")
+        )
+        return orders
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_id = self.kwargs.get("user_id")
+        user = User.objects.filter(id=user_id).only("first_name")[0]
+        context["user"] = user
+        return context
