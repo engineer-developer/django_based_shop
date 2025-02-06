@@ -20,8 +20,10 @@ from django.contrib.syndication.views import Feed
 from django.db.models.aggregates import Count
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render, reverse
+from django.utils.decorators import method_decorator
 from django.urls import reverse_lazy
 from django.views import View
+from django.views.decorators.cache import cache_page
 from django.views.generic import (
     CreateView,
     DeleteView,
@@ -273,6 +275,11 @@ class ProductViewSet(ModelViewSet):
         "price",
         "discount",
     ]
+
+    @method_decorator(cache_page(60 * 2))
+    def list(self, *args, **kwargs):
+        print("Hello products list")
+        return super().list(*args, **kwargs)
 
     @extend_schema(
         summary="Get one product by ID",
