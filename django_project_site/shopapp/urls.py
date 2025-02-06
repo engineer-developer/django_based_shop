@@ -1,5 +1,6 @@
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.urls import include, path
+from django.views.decorators.cache import cache_page
 from django.views.generic import RedirectView
 from rest_framework.routers import DefaultRouter
 
@@ -34,7 +35,7 @@ routers.register("orders", OrderViewSet)
 
 
 urlpatterns = [
-    path("", ShopIndexView.as_view(), name="index"),
+    path("", cache_page(60 * 3)(ShopIndexView.as_view()), name="index"),
     path("api/", include(routers.urls)),
     path("hello/", show_greetings, name="greetings"),
     path("users/", users_list, name="users_list"),
