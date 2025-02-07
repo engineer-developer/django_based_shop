@@ -6,14 +6,24 @@
 
 
 {% block main %}
-  <h1>{% firstof owner.first_name owner.username %} orders:</h1>
-  <div>
-    {% for order in orders %}
-    	<p>Order #{{ order.pk }}</p>
-      <p></p>
-    {% empty %}
-      <p>No orders yet</p>
-    {% endfor %}
+  {% if orders %}
+    <h1>Пользователь {% firstof owner.first_name owner.username %} выполнил следующие заказы:</h1>
+    <ol>
+      {% for order in orders %}
+      <li>
+        <div>Order #{{ order.pk }}:</div>
+        <div>
+          <ul>
+            {% for product in order.products.all %}
+            	<li>{{ product.name }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </li>
+      {% endfor %}
+    </ol>
+  {% else %}
+    <h3>У пользователя {% firstof owner.first_name owner.username %} ещё нет заказов</h3>
+  {% endif %}
 
-  </div>
 {% endblock %}
