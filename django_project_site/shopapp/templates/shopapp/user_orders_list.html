@@ -10,7 +10,7 @@
 {% block main %}
   {% if orders %}
     <h1>Пользователь {% firstof owner.first_name owner.username %} выполнил следующие заказы:</h1>
-    {% cache 300 orders %}
+    {% cache 300 orders owner.pk %}
       <ol>
         {% for order in orders %}
         <li>
