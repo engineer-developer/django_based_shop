@@ -43,7 +43,7 @@
             <div>
                 {% load tz %}
                 {% timezone "Asia/Yekaterinburg" %}
-                    {% translate 'Time' %}: {% now "H:i" %}
+                    {% translate 'Time' %}: {% now "H:i:s" %}
                 {% endtimezone %}
             </div>
         {% endblock %}
