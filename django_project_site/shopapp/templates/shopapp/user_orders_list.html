@@ -1,4 +1,6 @@
 {% extends 'shopapp/base.html' %}
+{% load cache %}
+
 
 {% block title %}
 	User orders
@@ -8,20 +10,22 @@
 {% block main %}
   {% if orders %}
     <h1>Пользователь {% firstof owner.first_name owner.username %} выполнил следующие заказы:</h1>
-    <ol>
-      {% for order in orders %}
-      <li>
-        <div>Order #{{ order.pk }}:</div>
-        <div>
-          <ul>
-            {% for product in order.products.all %}
-            	<li>{{ product.name }}</li>
-            {% endfor %}
-          </ul>
-        </div>
-      </li>
-      {% endfor %}
-    </ol>
+    {% cache 300 orders %}
+      <ol>
+        {% for order in orders %}
+        <li>
+          <div>Order #{{ order.pk }}:</div>
+          <div>
+            <ul>
+              {% for product in order.products.all %}
+                <li>{{ product.name }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </li>
+        {% endfor %}
+      </ol>
+    {% endcache %}
   {% else %}
     <h3>У пользователя {% firstof owner.first_name owner.username %} ещё нет заказов</h3>
   {% endif %}
