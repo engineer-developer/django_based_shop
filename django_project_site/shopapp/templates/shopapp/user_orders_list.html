@@ -6,7 +6,7 @@
 
 
 {% block main %}
-    <h1>{{ user.first_name }} orders:</h1>
+  <h1>{% firstof owner.first_name owner.username %} orders:</h1>
   <div>
     {% for order in orders %}
     	<p>Order #{{ order.pk }}</p>
