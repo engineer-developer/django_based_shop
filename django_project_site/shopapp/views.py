@@ -584,3 +584,39 @@ class UserOrdersListView(LoginRequiredMixin, ListView):
         self.owner = get_object_or_404(User, pk=user_id)
         context["owner"] = self.owner
         return context
+
+
+class DefinedUserOrdersExportView(View):
+    """Export to JSON orders for defined user"""
+
+    def get(self, request: HttpRequest, *args, **kwargs) -> JsonResponse:
+        user_id = self.kwargs.get("user_id")
+        cache_key = "user_orders_data_{user_identifier}".format(
+            user_identifier=user_id,
+        )
+        orders_data = cache.get(cache_key)
+        if orders_data is None:
+            owner = get_object_or_404(User, pk=user_id)
+            orders = (
+                Order.objects.filter(user=owner.pk)
+                .select_related("user")
+                .prefetch_related("products")
+                .annotate(products_count=Count("products"))
+                .filter(products_count__gt=0)
+                .order_by("pk")
+            )
+
+            orders_data = OrderSerializer(orders, many=True).data
+            # orders_data = [
+            #     {
+            #         "delivery_address": order.delivery_address,
+            #         "promocode": order.promocode,
+            #         "created_at": str(order.created_at),
+            #         "user": order.user.first_name or order.user.username,
+            #         "products": [product.name for product in order.products.all()],
+            #         "receipt": order.receipt.name or "Receipt don't exist",
+            #     }
+            #     for order in orders
+            # ]
+            cache.set(cache_key, orders_data, timeout=(60 * 3))
+        return JsonResponse({"orders": orders_data})
