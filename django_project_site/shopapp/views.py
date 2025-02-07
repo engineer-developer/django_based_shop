@@ -560,7 +560,7 @@ class OrderViewSet(ModelViewSet):
         return super().destroy(*args, **kwargs)
 
 
-class UserOrdersListView(ListView):
+class UserOrdersListView(LoginRequiredMixin, ListView):
     """Get user orders."""
 
     template_name = "shopapp/user_orders_list.html"
