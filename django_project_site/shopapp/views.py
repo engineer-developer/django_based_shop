@@ -20,7 +20,7 @@ from django.contrib.auth.models import Group, User
 from django.contrib.syndication.views import Feed
 from django.db.models.aggregates import Count
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
-from django.shortcuts import redirect, render, reverse
+from django.shortcuts import redirect, render, reverse, get_object_or_404
 from django.utils.decorators import method_decorator
 from django.urls import reverse_lazy
 from django.views import View
@@ -565,9 +565,10 @@ class UserOrdersListView(ListView):
 
     template_name = "shopapp/user_orders_list.html"
     context_object_name = "orders"
+    owner = None
 
     def get_queryset(self):
-        orders = (
+        queryset = (
             Order.objects.filter(user=self.kwargs.get("user_id"))
             .select_related("user")
             .prefetch_related("products")
@@ -575,11 +576,11 @@ class UserOrdersListView(ListView):
             .filter(products_count__gt=0)
             .order_by("pk")
         )
-        return orders
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user_id = self.kwargs.get("user_id")
-        user = User.objects.filter(id=user_id).only("first_name")[0]
-        context["user"] = user
+        self.owner = get_object_or_404(User, pk=user_id)
+        context["owner"] = self.owner
         return context
