@@ -84,3 +84,15 @@ class GroupForm(forms.ModelForm):
         fields = [
             "name",
         ]
+
+
+class CSVImportForm(forms.Form):
+    """CSV import form"""
+
+    csv_file = forms.FileField()
+
+
+class JSONImportForm(forms.Form):
+    """JSON import form"""
+
+    json_file = forms.FileField()

@@ -1,0 +1,14 @@
+[
+    {
+        "delivery_address": "Gogolya str. 72",
+        "promocode": "MAGIC_SALE",
+        "user": 4,
+        "products": [2, 1, 5, 6]
+    },
+    {
+        "delivery_address": "Riders str. 45",
+        "promocode": "FOR_SALE",
+        "user": 2,
+        "products": [6, 8, 9]
+    }
+]
