@@ -1,3 +1,5 @@
+from random import random
+
 from django.contrib.auth.decorators import (
     login_required,
     permission_required,
@@ -10,6 +12,7 @@ from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, JsonRes
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.views import LoginView, LogoutView
+from django.views.decorators.cache import cache_page
 from django.views import View
 from django.views.generic import (
     TemplateView,
@@ -152,12 +155,14 @@ def set_cookie_view(request: HttpRequest) -> HttpResponse:
     return response
 
 
+@cache_page(60 * 2)
 def get_cookie_view(request: HttpRequest) -> HttpResponse:
     """Get cookie"""
 
     key = "fizz"
     value = request.COOKIES.get(key, "default value")
-    return HttpResponse(f"Cookie with key {key!r} has value {value!r}")
+    random_value = random()
+    return HttpResponse(f"Cookie with key {key!r} has value {value!r} + {random_value}")
 
 
 @permission_required("myauth.view_profile", raise_exception=True)

@@ -26,6 +26,7 @@ class OrderSerializer(serializers.ModelSerializer):
             "pk",
             "delivery_address",
             "promocode",
+            "created_at",
             "user",
             "products",
             "receipt",

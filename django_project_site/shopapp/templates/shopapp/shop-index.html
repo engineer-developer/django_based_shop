@@ -1,55 +1,64 @@
 {% extends "shopapp/base.html" %}
 
+{% load cache %}
+
+
 {% block title %}
-Shop index
+  Shop index
 {% endblock %}
 
 
 {% block header %}
-    <h1>Hello Shop Index!</h1>
+  <h1>Hello Shop Index!</h1>
 {% endblock %}
 
 
 {% block main %}
-    <style>
-        p {margin: 0}
-    </style>
-    <h4>List of products</h4>
-    <div>
-        <ul>
-            {% for name, price in products %}
-                <li>{{ name.title }} for ${{ price }}</li>
-                {% if name|length == 7 %}
-                    Length of product name is 7:
-                {% else %}
-                    Length of product name not 7:
-                {% endif%}
-            {% empty %}
-                No products here
-            {% endfor %}
-        </ul>
-    </div>
+  <style>
+      p {margin: 0}
+  </style>
+  <h4>List of products</h4>
+  <div>
+    <ul>
+      {% for name, price in products %}
+        <li>{{ name.title }} for ${{ price }}</li>
+        {% if name|length == 7 %}
+          Length of product name is 7:
+        {% else %}
+          Length of product name not 7:
+        {% endif%}
+      {% empty %}
+        No products here
+      {% endfor %}
+    </ul>
+  </div>
 
-    <div>
-        <h4>Pluralize samples</h4>
-        <p>You have {{ items }} item{{ items|pluralize }}</p>
-        <p>You have {{ items }} class{{ items|pluralize:"es" }}</p>
-        <p>You have {{ items }} cherr{{ items|pluralize:"y,ies" }}</p>
-    </div>
+  <div>
+    <h4>Pluralize samples</h4>
+    <p>You have {{ items }} item{{ items|pluralize }}</p>
+    <p>You have {{ items }} class{{ items|pluralize:"es" }}</p>
+    <p>You have {{ items }} cherr{{ items|pluralize:"y,ies" }}</p>
+  </div>
 
-    <h4>Random 50 lorem words</h4>
+  <h4>Random 50 lorem words</h4>
+
+  {% cache 100 lorem %}
     <div>
-        {% lorem 50 w random %}
+      {% lorem 50 w random %}
     </div>
+  {% endcache %}
+
+
+
 {% endblock %}
 
 
 {% block footer %}
-    <h4>Summary info</h4>
-    <div>
-        Time running: {{ time_running }}
-    </div>
-    <div>
-        &copy; {{ current_date|date:"Y" }}
-    </div>
+  <h4>Summary info</h4>
+  <div>
+    Time running: {{ time_running }}
+  </div>
+  <div>
+    &copy; {{ current_date|date:"Y" }}
+  </div>
 {% endblock %}

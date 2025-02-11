@@ -15,13 +15,16 @@ from django.contrib.auth.mixins import (
     PermissionRequiredMixin,
     UserPassesTestMixin,
 )
+from django.core.cache import cache
 from django.contrib.auth.models import Group, User
 from django.contrib.syndication.views import Feed
 from django.db.models.aggregates import Count
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
-from django.shortcuts import redirect, render, reverse
+from django.shortcuts import redirect, render, reverse, get_object_or_404
+from django.utils.decorators import method_decorator
 from django.urls import reverse_lazy
 from django.views import View
+from django.views.decorators.cache import cache_page
 from django.views.generic import (
     CreateView,
     DeleteView,
@@ -57,6 +60,8 @@ def show_greetings(request: HttpRequest) -> HttpResponse:
 
 
 class ShopIndexView(View):
+
+    # @method_decorator(cache_page(60 * 2))
     def get(self, request: HttpRequest) -> HttpResponse:
         """Get index page."""
 
@@ -80,6 +85,9 @@ class ShopIndexView(View):
 
         logger.debug("Products for shop index %s", products)
         logger.info("Rendering shop index")
+
+        print("shop index context", context)
+
         return render(request, "shopapp/shop-index.html", context=context)
 
 
@@ -230,16 +238,20 @@ class ProductsDataExportView(View):
     """Export product data."""
 
     def get(self, request: HttpRequest) -> JsonResponse:
-        products = Product.objects.order_by("pk").all()
-        products_data = [
-            {
-                "pk": product.pk,
-                "name": product.name,
-                "price": product.price,
-                "archived": product.archived,
-            }
-            for product in products
-        ]
+        cache_key = "products_data_export"
+        products_data = cache.get(cache_key)
+        if products_data is None:
+            products = Product.objects.order_by("pk").all()
+            products_data = [
+                {
+                    "pk": product.pk,
+                    "name": product.name,
+                    "price": product.price,
+                    "archived": product.archived,
+                }
+                for product in products
+            ]
+            cache.set(cache_key, products_data, 300)
         return JsonResponse({"products": products_data})
 
 
@@ -270,6 +282,11 @@ class ProductViewSet(ModelViewSet):
         "price",
         "discount",
     ]
+
+    @method_decorator(cache_page(60 * 2))
+    def list(self, *args, **kwargs):
+        print("Hello products list")
+        return super().list(*args, **kwargs)
 
     @extend_schema(
         summary="Get one product by ID",
@@ -541,3 +558,65 @@ class OrderViewSet(ModelViewSet):
     )
     def destroy(self, *args, **kwargs):
         return super().destroy(*args, **kwargs)
+
+
+class UserOrdersListView(LoginRequiredMixin, ListView):
+    """Get user orders."""
+
+    template_name = "shopapp/user_orders_list.html"
+    context_object_name = "orders"
+    owner = None
+
+    def get_queryset(self):
+        queryset = (
+            Order.objects.filter(user=self.kwargs.get("user_id"))
+            .select_related("user")
+            .prefetch_related("products")
+            .annotate(products_count=Count("products"))
+            .filter(products_count__gt=0)
+            .order_by("pk")
+        )
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_id = self.kwargs.get("user_id")
+        self.owner = get_object_or_404(User, pk=user_id)
+        context["owner"] = self.owner
+        return context
+
+
+class DefinedUserOrdersExportView(View):
+    """Export to JSON orders for defined user"""
+
+    def get(self, request: HttpRequest, *args, **kwargs) -> JsonResponse:
+        user_id = self.kwargs.get("user_id")
+        cache_key = "user_orders_data_{user_identifier}".format(
+            user_identifier=user_id,
+        )
+        orders_data = cache.get(cache_key)
+        if orders_data is None:
+            owner = get_object_or_404(User, pk=user_id)
+            orders = (
+                Order.objects.filter(user=owner.pk)
+                .select_related("user")
+                .prefetch_related("products")
+                .annotate(products_count=Count("products"))
+                .filter(products_count__gt=0)
+                .order_by("pk")
+            )
+
+            orders_data = OrderSerializer(orders, many=True).data
+            # orders_data = [
+            #     {
+            #         "delivery_address": order.delivery_address,
+            #         "promocode": order.promocode,
+            #         "created_at": str(order.created_at),
+            #         "user": order.user.first_name or order.user.username,
+            #         "products": [product.name for product in order.products.all()],
+            #         "receipt": order.receipt.name or "Receipt don't exist",
+            #     }
+            #     for order in orders
+            # ]
+            cache.set(cache_key, orders_data, timeout=(60 * 3))
+        return JsonResponse({"orders": orders_data})
