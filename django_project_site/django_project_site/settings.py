@@ -20,6 +20,8 @@ from django.utils.translation import gettext_lazy as _
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+DATABASE_DIR = BASE_DIR / "database"
+DATABASE_DIR.mkdir(exist_ok=True)
 
 
 # Quick-start development settings - unsuitable for production
