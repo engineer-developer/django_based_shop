@@ -28,7 +28,10 @@ DATABASE_DIR.mkdir(exist_ok=True)
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-mu2!6bc$+5l@u)z=9fyg51mpol71!9_byi@vl5=nagurp)88k@"
+SECRET_KEY = getenv(
+    "DJANGO_SECRET_KEY",
+    "django-insecure-mu2!6bc$+5l@u)z=9fyg51mpol71!9_byi@vl5=nagurp)88k@",
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
