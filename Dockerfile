@@ -1,13 +1,16 @@
-FROM python:3.12
+FROM python:3.12.3
 
 ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
-COPY requirements.txt requirements.txt
+RUN pip install --upgrade pip "poetry==1.8.4"
 
-RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+RUN poetry config virtualenvs.create false --local
+
+COPY pyproject.toml poetry.lock ./
+
+RUN poetry install
 
 COPY django_project_site .
 
