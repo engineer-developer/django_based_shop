@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
   <title>
     {% block title %}
       Blog Title
@@ -9,25 +10,27 @@
   </title>
   <style>
     body {
-        margin: 0;
+      margin: 0;
     }
+
     #page_header {
-        width: 100%;
-        background-color: #98ebe3;
-        text-align: center;
-        margin: 0;
+      width: 100%;
+      background-color: #98ebe3;
+      text-align: center;
+      margin: 0;
     }
+
     #page_body {
-        margin: 10px;
+      margin: 10px;
     }
   </style>
 </head>
 
 <body>
-  <div id="page_header">Blog app</div>
-  <div id="page_body">
-    {% block body %}
-    {% endblock %}
-  </div>
+<div id="page_header">Blog app</div>
+<div id="page_body">
+  {% block body %}
+  {% endblock %}
+</div>
 </body>
 </html>
