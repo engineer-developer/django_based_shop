@@ -18,7 +18,8 @@ services:
     env_file:
       - .env
     volumes:
-      - ./django_project_site/database:/app/database
+      - ./django_project_site/database:/app/database/
+      - ./django_project_site/static/:/app/static/
     logging:
       driver: "json-file"
       options:
