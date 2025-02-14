@@ -1,33 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>
-        {% block title %}
-            
-        {% endblock %}
-    </title>
-    <style>
-        .header {
-            display: flex;
-            justify-content: flex-end;
-        }
+  <meta charset="UTF-8">
+  <title>
+    {% block title %}
 
-    </style>
+    {% endblock %}
+  </title>
+  <style>
+    .header {
+      display: flex;
+      justify-content: flex-end;
+    }
+  </style>
 </head>
-<body>
-    {% block header %}
-        <div class="header">
-            {% if not user.is_authenticated %}
-            	<div><a href="{% url "myauth:login" %}">Login</a></div>
-            {% else %}
-                <div><a href="{% url "myauth:logout" %}">Logout</a></div>
-            {% endif %}
-        </div>
-    {% endblock %}
 
-    {% block body %}
-    	
-    {% endblock %}
+<body>
+{% block header %}
+  <div class="header">
+    {% if not user.is_authenticated %}
+      <div><a href="{% url "myauth:login" %}">Login</a></div>
+    {% else %}
+      <div><a href="{% url "myauth:logout" %}">Logout</a></div>
+    {% endif %}
+  </div>
+{% endblock %}
+
+{% block body %}
+
+{% endblock %}
 </body>
 </html>

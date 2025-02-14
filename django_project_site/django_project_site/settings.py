@@ -10,6 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+import logging
+import logging.config
+from os import getenv
 from pathlib import Path
 
 from django.urls import reverse_lazy
@@ -17,21 +20,30 @@ from django.utils.translation import gettext_lazy as _
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+DATABASE_DIR = BASE_DIR / "database"
+DATABASE_DIR.mkdir(exist_ok=True)
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-mu2!6bc$+5l@u)z=9fyg51mpol71!9_byi@vl5=nagurp)88k@"
+SECRET_KEY = getenv(
+    "DJANGO_SECRET_KEY",
+    "django-insecure-mu2!6bc$+5l@u)z=9fyg51mpol71!9_byi@vl5=nagurp)88k@",
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
+DEBUG = getenv("DJANGO_DEBUG", "0") == "1"
 
 ALLOWED_HOSTS = [
     "0.0.0.0",
     "127.0.0.1",
-]
+] + getenv(
+    "DJANGO_ALLOWED_HOSTS", ""
+).split(",")
+
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
@@ -113,7 +125,7 @@ WSGI_APPLICATION = "django_project_site.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "NAME": DATABASE_DIR / "db.sqlite3",
     }
 }
 
@@ -170,6 +182,8 @@ LANGUAGES = [
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
+STATIC_ROOT = BASE_DIR / "static"
+STATIC_ROOT.mkdir(exist_ok=True)
 STATIC_URL = "static/"
 
 MEDIA_URL = "/media/"
@@ -226,35 +240,64 @@ SPECTACULAR_SETTINGS = {
 #     },
 # }
 
-# Logging settings for app logging
-LOGFILE_NAME = BASE_DIR / "logs" / "logfile.log"
-LOGFILE_SIZE = 1 * 1024 * 1024
-LOGFILE_COUNT = 3
+# Logging settings for app logging (version=1)
+# LOGFILE_NAME = BASE_DIR / "logs" / "logfile.log"
+# LOGFILE_SIZE = 1 * 1024 * 1024
+# LOGFILE_COUNT = 3
+#
+# LOGGING = {
+#     "version": 1,
+#     "disable_existing_loggers": False,
+#     "formatters": {
+#         "verbose": {"format": "%(asctime)s - [%(levelname)s] - %(name)s: %(message)s"},
+#     },
+#     "handlers": {
+#         "console": {
+#             "class": "logging.StreamHandler",
+#             "formatter": "verbose",
+#         },
+#         "logfile": {
+#             "class": "logging.handlers.RotatingFileHandler",
+#             "filename": LOGFILE_NAME,
+#             "maxBytes": LOGFILE_SIZE,
+#             "backupCount": LOGFILE_COUNT,
+#             "formatter": "verbose",
+#         },
+#     },
+#     "root": {
+#         "handlers": [
+#             "console",
+#             "logfile",
+#         ],
+#         "level": "INFO",
+#     },
+# }
 
-LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "formatters": {
-        "verbose": {"format": "%(asctime)s - [%(levelname)s] - %(name)s: %(message)s"},
-    },
-    "handlers": {
-        "console": {
-            "class": "logging.StreamHandler",
-            "formatter": "verbose",
+# Logging settings for app logging (version=2)
+LOGLEVEL = getenv("DJANGO_LOGLEVEL", "info").upper()
+
+logging.config.dictConfig(
+    {
+        "version": 1,
+        "disable_existing_loggers": False,
+        "formatters": {
+            "console": {
+                "format": "%(asctime)s %(levelname)s [%(name)s:%(lineno)s] %(module)s %(message)s",
+            },
         },
-        "logfile": {
-            "class": "logging.handlers.RotatingFileHandler",
-            "filename": LOGFILE_NAME,
-            "maxBytes": LOGFILE_SIZE,
-            "backupCount": LOGFILE_COUNT,
-            "formatter": "verbose",
+        "handlers": {
+            "console": {
+                "class": "logging.StreamHandler",
+                "formatter": "console",
+            },
+        },
+        "loggers": {
+            "": {
+                "level": LOGLEVEL,
+                "handlers": [
+                    "console",
+                ],
+            },
         },
     },
-    "root": {
-        "handlers": [
-            "console",
-            "logfile",
-        ],
-        "level": "INFO",
-    },
-}
+)

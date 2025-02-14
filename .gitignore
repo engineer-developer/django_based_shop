@@ -132,3 +132,6 @@ dmypy.json
 
 # Jetbrains Intellij IDEA
 .idea/
+
+# User defined
+/django_project_site/static/*
