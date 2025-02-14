@@ -38,6 +38,7 @@ services:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./django_project_site/static/:/static/  # Монтируем статические файлы
+      - ./django_project_site/uploads/:/uploads/  # Монтируем изображения
     ports:
       - "80:80"
     depends_on:
