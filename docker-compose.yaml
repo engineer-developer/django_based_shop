@@ -41,6 +41,7 @@ services:
       - ./django_project_site/uploads/:/uploads/  # Монтируем изображения
     ports:
       - "80:80"
+    restart: always
     depends_on:
       - app
 
